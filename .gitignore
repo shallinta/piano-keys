@@ -1,0 +1,12 @@
+node_modules/
+out/
+.vscode/
+.vscode-test/
+.superpowers/
+.log/
+
+.omc/
+
+.DS_Store
+
+*.zip

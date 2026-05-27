@@ -1,0 +1,319 @@
+{
+  "name": "piano-keys",
+  "displayName": "Piano Keys",
+  "description": "Code review plugin with AI agent assistance",
+  "version": "1.0.0",
+  "publisher": "shallinta",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shallinta/piano-keys"
+  },
+  "icon": "media/icon.png",
+  "categories": [
+    "Other"
+  ],
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "piano-keys",
+          "title": "Piano Keys",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "piano-keys": [
+        {
+          "type": "webview",
+          "id": "piano-keys.sidePanel",
+          "name": "Review"
+        },
+        {
+          "id": "piano-keys.badge",
+          "name": "Comments"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "piano-keys.startReview",
+        "title": "Piano Keys: Start Code Review"
+      },
+      {
+        "command": "piano-keys.openDiff",
+        "title": "Piano Keys: Open Diff"
+      },
+      {
+        "command": "piano-keys.openFile",
+        "title": "Piano Keys: Open File Diff"
+      },
+      {
+        "command": "piano-keys.submitAllComments",
+        "title": "Piano Keys: Submit All Comments"
+      },
+      {
+        "command": "piano-keys.submitSingleComment",
+        "title": "Piano Keys: Submit Single Comment"
+      },
+      {
+        "command": "piano-keys.confirmAllAgentComments",
+        "title": "Piano Keys: Confirm All Agent Comments"
+      },
+      {
+        "command": "piano-keys.refreshSidePanel",
+        "title": "Piano Keys: Refresh Side Panel"
+      },
+      {
+        "command": "piano-keys.refreshEditorThreads",
+        "title": "Piano Keys: Refresh Editor Threads"
+      },
+      {
+        "command": "piano-keys.addAgentComment",
+        "title": "Piano Keys: Add Agent Comment"
+      },
+      {
+        "command": "piano-keys.getReviewState",
+        "title": "Piano Keys: Get Review State"
+      },
+      {
+        "command": "piano-keys.deleteAgentComment",
+        "title": "Piano Keys: Delete Agent Comment"
+      },
+      {
+        "command": "piano-keys.agentSubmitAll",
+        "title": "Piano Keys: Agent Submit All"
+      },
+      {
+        "command": "piano-keys.agentOpenFileDiff",
+        "title": "Piano Keys: Open File Diff (Agent)"
+      },
+      {
+        "command": "piano-keys.installSkill",
+        "title": "Piano Keys: Install Code Review Skill"
+      },
+      {
+        "command": "piano-keys.createComment",
+        "title": "Piano Keys: Create Comment"
+      },
+      {
+        "command": "piano-keys.replyComment",
+        "title": "Piano Keys: Reply to Comment"
+      },
+      {
+        "command": "piano-keys.deleteThread",
+        "title": "Piano Keys: Delete Thread"
+      },
+      {
+        "command": "piano-keys.deleteComment",
+        "title": "Piano Keys: Delete Comment"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "piano-keys.startReview"
+        },
+        {
+          "command": "piano-keys.openDiff"
+        },
+        {
+          "command": "piano-keys.openFile"
+        },
+        {
+          "command": "piano-keys.submitAllComments"
+        },
+        {
+          "command": "piano-keys.confirmAllAgentComments"
+        },
+        {
+          "command": "piano-keys.installSkill"
+        },
+        {
+          "command": "piano-keys.refreshSidePanel",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.refreshEditorThreads",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.submitSingleComment",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.addAgentComment",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.getReviewState",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.deleteAgentComment",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.agentSubmitAll",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.agentOpenFileDiff",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.createComment",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.replyComment",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.deleteThread",
+          "when": "false"
+        },
+        {
+          "command": "piano-keys.deleteComment",
+          "when": "false"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "piano-keys.createComment",
+          "group": "inline",
+          "when": "commentController == piano-keys && commentThreadIsEmpty"
+        },
+        {
+          "command": "piano-keys.replyComment",
+          "group": "inline",
+          "when": "commentController == piano-keys && !commentThreadIsEmpty"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "piano-keys.deleteThread",
+          "group": "navigation",
+          "when": "commentController == piano-keys && !commentThreadIsEmpty"
+        }
+      ],
+      "comments/comment/title": [
+        {
+          "command": "piano-keys.deleteComment",
+          "group": "group@1",
+          "when": "commentController == piano-keys && comment == canDelete"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Piano Keys",
+      "properties": {
+        "piano-keys.01.theme": {
+          "type": "string",
+          "default": "piano-dark",
+          "enum": [
+            "piano-dark",
+            "piano-light",
+            "midnight-blue",
+            "nocturne-purple",
+            "classic-light"
+          ],
+          "enumDescriptions": [
+            "Piano Dark — 钢琴键深色主题",
+            "Piano Light — 钢琴键浅色主题",
+            "Midnight Blue — 深海蓝主题",
+            "Nocturne Purple — 夜曲紫主题",
+            "Classic Light — 经典浅色主题"
+          ],
+          "description": "UI theme for the side panel / 侧边栏界面主题"
+        },
+        "piano-keys.02.defaultRemote": {
+          "type": "string",
+          "default": "origin",
+          "description": "Default git remote name / 默认 git 远程名称"
+        },
+        "piano-keys.03.reviewDocPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".github/CONTRIBUTING.md",
+            "docs/**/style-guide.md",
+            "**/CODE_OF_CONDUCT.md"
+          ],
+          "description": "Glob patterns for code review spec documents. Agent will read these files before reviewing. / 代码评审规范文档的匹配模式，Agent 评审前会读取这些文件"
+        },
+        "piano-keys.04.userSignature": {
+          "type": "string",
+          "default": "「Powered by vscode `Piano Keys`」",
+          "description": "Signature appended to user comments. Clear to disable. / 追加到用户评论末尾的签名，清空可禁用"
+        },
+        "piano-keys.05.agentSignature": {
+          "type": "string",
+          "default": "「Powered by vscode `Piano Keys`」",
+          "description": "Signature appended to agent comments. Clear to disable. / 追加到 Agent 评论末尾的签名，清空可禁用"
+        },
+        "piano-keys.06.agentAppendToolName": {
+          "type": "boolean",
+          "default": true,
+          "description": "Append agent tool name (e.g., '(by claude code)') to agent comments. / 在 Agent 评论末尾追加工具名称（如 '(by claude code)'）"
+        },
+        "piano-keys.07.gitProviders": {
+          "type": "array",
+          "default": [
+            {
+              "id": "github",
+              "label": "GitHub",
+              "type": "cli",
+              "builtIn": true,
+              "remoteUrlPatterns": [
+                "github.com"
+              ],
+              "cli": "gh",
+              "adapter": {
+                "preset": "github",
+                "capabilities": {
+                  "checkAuth": true,
+                  "authLogin": true,
+                  "listMRs": true,
+                  "getMRByNumber": true,
+                  "getMRFromLink": true,
+                  "getMRId": true,
+                  "submitComment": true,
+                  "listComments": true,
+                  "remoteCommentResolutionState": false,
+                  "resolveRemoteComment": false,
+                  "reopenRemoteComment": false
+                }
+              }
+            }
+          ],
+          "description": "Custom Git providers for non-GitHub repositories. You can hand-write basic fields such as id, type=cli, remoteUrlPatterns and cli, then ask an agent using the piano-keys-cr skill to probe CLI --help and complete the optional adapter. HTTP provider support is planned for P2 and is not active in this version. / 自定义 Git provider 配置。用户可手填基础字段，也可让 agent 通过交互式问答和 CLI --help 自动补全 adapter。HTTP provider 为 P2 规划，本版本暂不启用。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "execa": "^8.0.0",
+    "express": "5.2.1"
+  }
+}

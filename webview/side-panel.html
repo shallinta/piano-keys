@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100vh; font-family: var(--vscode-font-family); color: var(--vscode-foreground); }
+    body { display: flex; flex-direction: column; overflow: hidden; }
+    #app { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+    .panel-content { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-height: 0; }
+
+    /* ===== Theme: Piano Keys Dark (default) ===== */
+    body[data-theme="piano-dark"] {
+      --theme-card-user-bg: linear-gradient(105deg,#141414 0%,#222 40%,#282828 50%,#222 60%,#141414 100%);
+      --theme-card-user-border: #333;
+      --theme-card-user-border-left: #e0e0e0;
+      --theme-card-user-text: #eee;
+      --theme-card-user-label: #ddd;
+      --theme-card-user-loc: #e0e0e0;
+      --theme-card-user-code-bg: #333;
+      --theme-card-user-code-border: #555;
+      --theme-card-user-code-text: #f5f5f5;
+      --theme-card-user-source: #2a2a2a;
+      --theme-card-user-source-text: #888;
+      --theme-card-user-source-link: #aaa;
+      --theme-card-user-source-border: #2a2a2a;
+
+      --theme-card-agent-bg: linear-gradient(105deg,#080808 0%,#121212 40%,#161616 50%,#121212 60%,#080808 100%);
+      --theme-card-agent-border: #1a1a1a;
+      --theme-card-agent-border-left: #666;
+      --theme-card-agent-text: #aaa;
+      --theme-card-agent-label: #888;
+      --theme-card-agent-loc: #777;
+      --theme-card-agent-code-bg: #1a1a1a;
+      --theme-card-agent-code-border: #333;
+      --theme-card-agent-code-text: #bbb;
+      --theme-card-agent-source: #2a2a2a;
+      --theme-card-agent-source-text: #888;
+      --theme-card-agent-source-link: #aaa;
+      --theme-card-agent-source-border: #2a2a2a;
+
+      --theme-badge-confirmed-bg: linear-gradient(135deg,#e8e8e8,#bbb);
+      --theme-badge-confirmed-text: #111;
+      --theme-badge-pending-bg: linear-gradient(135deg,#555,#333);
+      --theme-badge-pending-text: #ddd;
+      --theme-badge-submitted-bg: linear-gradient(135deg,#4ade80,#22c55e);
+      --theme-badge-submitted-text: #0a0a0a;
+      --theme-card-submitted-border-left: #4ade80;
+      --theme-btn-keep-bg: linear-gradient(135deg,#aaa,#777);
+      --theme-btn-keep-text: #111;
+      --theme-btn-delete-bg: #222;
+      --theme-btn-delete-text: #aaa;
+      --theme-btn-delete-border: 1px solid #333;
+
+      --theme-remote-bg: linear-gradient(105deg,#101010 0%,#181818 50%,#101010 100%);
+      --theme-remote-border: #2a2a2a;
+      --theme-remote-border-left: #555;
+      --theme-remote-author-text: #ddd;
+      --theme-remote-content-text: #e0e0e0;
+      --theme-remote-label: #777;
+      --theme-remote-loc: #999;
+      --theme-remote-badge-bg: #333;
+      --theme-remote-badge-text: #ccc;
+
+      --theme-deleted-bg: linear-gradient(105deg,#1a0e0e 0%,#201414 50%,#1a0e0e 100%);
+      --theme-deleted-border: #2a1a1a;
+      --theme-deleted-border-left: #8b0000;
+      --theme-deleted-text: #666;
+      --theme-deleted-loc: #555;
+      --theme-deleted-action-bg: #2a1a1a;
+      --theme-deleted-action-text: #aaa;
+      --theme-deleted-badge-bg: #2a2a2a;
+      --theme-deleted-badge-text: #666;
+
+      --theme-undo-text: #aaa;
+      --theme-toast-shadow: 0 8px 28px rgba(0,0,0,0.55);
+      --theme-toast-overlay: rgba(0,0,0,0.38);
+      --theme-toast-bg: #1f1f1f;
+      --theme-toast-tint: #292929;
+      --theme-toast-border: #4a4a4a;
+      --theme-toast-accent: #e0e0e0;
+      --theme-toast-text: #f2f2f2;
+      --theme-toast-muted: #c8c8c8;
+      --theme-toast-label-bg: #333;
+      --theme-toast-label-text: #eee;
+      --theme-toast-shelf-bg: linear-gradient(180deg, transparent 0%, #161616 72%, #161616 100%);
+    }
+
+    /* ===== Theme: Piano Keys Light ===== */
+    body[data-theme="piano-light"] {
+      --theme-card-user-bg: linear-gradient(105deg,#e8e8e8 0%,#f8f8f8 40%,#ffffff 50%,#f8f8f8 60%,#e8e8e8 100%);
+      --theme-card-user-border: #d0d0d0;
+      --theme-card-user-border-left: #555;
+      --theme-card-user-text: #1a1a1a;
+      --theme-card-user-label: #333;
+      --theme-card-user-loc: #555;
+      --theme-card-user-code-bg: #e8e8e8;
+      --theme-card-user-code-border: #ccc;
+      --theme-card-user-code-text: #222;
+      --theme-card-user-source: #f0f0f0;
+      --theme-card-user-source-text: #999;
+      --theme-card-user-source-link: #666;
+      --theme-card-user-source-border: rgba(0,0,0,0.06);
+
+      --theme-card-agent-bg: linear-gradient(105deg,#e4e6e8 0%,#eceef0 40%,#f2f4f6 50%,#eceef0 60%,#e4e6e8 100%);
+      --theme-card-agent-border: #d5d8dc;
+      --theme-card-agent-border-left: #999;
+      --theme-card-agent-text: #444;
+      --theme-card-agent-label: #555;
+      --theme-card-agent-loc: #666;
+      --theme-card-agent-code-bg: #e4e6e8;
+      --theme-card-agent-code-border: #c8cacc;
+      --theme-card-agent-code-text: #555;
+      --theme-card-agent-source: #f0f0f0;
+      --theme-card-agent-source-text: #999;
+      --theme-card-agent-source-link: #666;
+      --theme-card-agent-source-border: rgba(0,0,0,0.04);
+
+      --theme-badge-confirmed-bg: linear-gradient(135deg,#333,#555);
+      --theme-badge-confirmed-text: #fff;
+      --theme-badge-pending-bg: linear-gradient(135deg,#d0d2d6,#b8bac0);
+      --theme-badge-pending-text: #444;
+      --theme-badge-submitted-bg: linear-gradient(135deg,#4ade80,#22c55e);
+      --theme-badge-submitted-text: #fff;
+      --theme-card-submitted-border-left: #4ade80;
+      --theme-btn-keep-bg: linear-gradient(135deg,#333,#888);
+      --theme-btn-keep-text: #fff;
+      --theme-btn-delete-bg: linear-gradient(135deg,#ddd,#aaa);
+      --theme-btn-delete-text: #444;
+
+      --theme-remote-bg: linear-gradient(105deg,#e8eaec 0%,#f0f2f4 50%,#e8eaec 100%);
+      --theme-remote-border: #d0d0d0;
+      --theme-remote-border-left: #888;
+      --theme-remote-author-text: #222;
+      --theme-remote-content-text: #1a1a1a;
+      --theme-remote-label: #666;
+      --theme-remote-loc: #666;
+      --theme-remote-badge-bg: #d8d8d8;
+      --theme-remote-badge-text: #444;
+
+      --theme-deleted-bg: linear-gradient(105deg,#fde8e8 0%,#feecec 50%,#fde8e8 100%);
+      --theme-deleted-border: #e0c0c0;
+      --theme-deleted-border-left: #d32f2f;
+      --theme-deleted-text: #888;
+      --theme-deleted-loc: #aaa;
+      --theme-deleted-action-bg: #f0e0e0;
+      --theme-deleted-action-text: #666;
+      --theme-deleted-badge-bg: #e0e0e0;
+      --theme-deleted-badge-text: #888;
+      --theme-toast-shadow: 0 8px 26px rgba(0,0,0,0.18);
+      --theme-toast-overlay: rgba(0,0,0,0.16);
+      --theme-toast-bg: #ffffff;
+      --theme-toast-tint: #f5f6f8;
+      --theme-toast-border: #9ca3af;
+      --theme-toast-accent: #555;
+      --theme-toast-text: #111827;
+      --theme-toast-muted: #374151;
+      --theme-toast-label-bg: #333;
+      --theme-toast-label-text: #fff;
+      --theme-toast-shelf-bg: linear-gradient(180deg, transparent 0%, #f3f4f6 72%, #f3f4f6 100%);
+    }
+
+    /* ===== Theme: Midnight Blue ===== */
+    body[data-theme="midnight-blue"] {
+      --theme-card-user-bg: linear-gradient(105deg,#0e1828 0%,#152538 40%,#182c42 50%,#152538 60%,#0e1828 100%);
+      --theme-card-user-border: #2a3a4a;
+      --theme-card-user-border-left: #58a6ff;
+      --theme-card-user-text: #e0e8f0;
+      --theme-card-user-label: #b8c8d8;
+      --theme-card-user-loc: #c8d8e8;
+      --theme-card-user-code-bg: #1c3450;
+      --theme-card-user-code-border: #3a6090;
+      --theme-card-user-code-text: #8ab4f8;
+      --theme-card-user-source: #2a3a4a;
+      --theme-card-user-source-text: #7a8a9e;
+      --theme-card-user-source-link: #a0b0c0;
+      --theme-card-user-source-border: #2a3a4a;
+
+      --theme-card-agent-bg: linear-gradient(105deg,#0e1828 0%,#152538 40%,#182c42 50%,#152538 60%,#0e1828 100%);
+      --theme-card-agent-border: #2a3a4a;
+      --theme-card-agent-border-left: #f0883e;
+      --theme-card-agent-text: #e0e8f0;
+      --theme-card-agent-label: #b8c8d8;
+      --theme-card-agent-loc: #c8d8e8;
+      --theme-card-agent-code-bg: #1c3450;
+      --theme-card-agent-code-border: #3a6090;
+      --theme-card-agent-code-text: #8ab4f8;
+      --theme-card-agent-source: #2a3a4a;
+      --theme-card-agent-source-text: #7a8a9e;
+      --theme-card-agent-source-link: #a0b0c0;
+      --theme-card-agent-source-border: #2a3a4a;
+
+      --theme-badge-confirmed-bg: linear-gradient(135deg,#58a6ff,#388bfd);
+      --theme-badge-confirmed-text: #fff;
+      --theme-badge-pending-bg: linear-gradient(135deg,#f0883e,#db6d28);
+      --theme-badge-pending-text: #fff;
+      --theme-badge-submitted-bg: linear-gradient(135deg,#3fb950,#2ea043);
+      --theme-badge-submitted-text: #fff;
+      --theme-card-submitted-border-left: #3fb950;
+      --theme-btn-keep-bg: linear-gradient(135deg,#ff9944,#d45e1a);
+      --theme-btn-keep-text: #fff;
+      --theme-btn-delete-bg: linear-gradient(135deg,#2a3a4a,#1a2a3a);
+      --theme-btn-delete-text: #b8c8d8;
+
+      --theme-remote-bg: linear-gradient(105deg,#0c1420 0%,#121e30 50%,#0c1420 100%);
+      --theme-remote-border: #243448;
+      --theme-remote-border-left: #4a8ab5;
+      --theme-remote-author-text: #c8d8e8;
+      --theme-remote-content-text: #d0e0f0;
+      --theme-remote-label: #6a7a8a;
+      --theme-remote-loc: #8090a8;
+      --theme-remote-badge-bg: #1e2e40;
+      --theme-remote-badge-text: #b0c0d0;
+
+      --theme-deleted-bg: linear-gradient(105deg,#1a0e18 0%,#221420 50%,#1a0e18 100%);
+      --theme-deleted-border: #2e1a28;
+      --theme-deleted-border-left: #b71c1c;
+      --theme-deleted-text: #886;
+      --theme-deleted-loc: #775;
+      --theme-deleted-action-bg: #2e1a28;
+      --theme-deleted-action-text: #b8c8d8;
+      --theme-deleted-badge-bg: #1e2e40;
+      --theme-deleted-badge-text: #8898a8;
+      --theme-toast-shadow: 0 8px 28px rgba(0,0,0,0.5);
+      --theme-toast-overlay: rgba(0,0,0,0.38);
+      --theme-toast-bg: #102033;
+      --theme-toast-tint: #172d46;
+      --theme-toast-border: #3a6090;
+      --theme-toast-accent: #58a6ff;
+      --theme-toast-text: #eef6ff;
+      --theme-toast-muted: #c5d8ee;
+      --theme-toast-label-bg: #1e456f;
+      --theme-toast-label-text: #e0f0ff;
+      --theme-toast-shelf-bg: linear-gradient(180deg, transparent 0%, #0d1a2a 72%, #0d1a2a 100%);
+    }
+
+    /* ===== Theme: Nocturne Purple ===== */
+    body[data-theme="nocturne-purple"] {
+      --theme-card-user-bg: linear-gradient(105deg,#140e20 0%,#1e1438 40%,#261a4a 50%,#1e1438 60%,#140e20 100%);
+      --theme-card-user-border: #2e1e50;
+      --theme-card-user-border-left: #c084fc;
+      --theme-card-user-text: #e8ddf5;
+      --theme-card-user-label: #d8c8f0;
+      --theme-card-user-loc: #d0c0e8;
+      --theme-card-user-code-bg: #2a1860;
+      --theme-card-user-code-border: #5a3a9a;
+      --theme-card-user-code-text: #d0b0f8;
+      --theme-card-user-source: #2e1e50;
+      --theme-card-user-source-text: #a088cc;
+      --theme-card-user-source-link: #b0a8d0;
+      --theme-card-user-source-border: #2e1e50;
+
+      --theme-card-agent-bg: linear-gradient(105deg,#140e20 0%,#1e1438 40%,#261a4a 50%,#1e1438 60%,#140e20 100%);
+      --theme-card-agent-border: #2e1e50;
+      --theme-card-agent-border-left: #e879f9;
+      --theme-card-agent-text: #e8ddf5;
+      --theme-card-agent-label: #d8c8f0;
+      --theme-card-agent-loc: #d0c0e8;
+      --theme-card-agent-code-bg: #2a1860;
+      --theme-card-agent-code-border: #5a3a9a;
+      --theme-card-agent-code-text: #d0b0f8;
+      --theme-card-agent-source: #2a1850;
+      --theme-card-agent-source-text: #a088cc;
+      --theme-card-agent-source-link: #b0a8d0;
+      --theme-card-agent-source-border: #2e1e50;
+
+      --theme-badge-confirmed-bg: linear-gradient(135deg,#c084fc,#9333ea);
+      --theme-badge-confirmed-text: #fff;
+      --theme-badge-pending-bg: linear-gradient(135deg,#e879f9,#c026d3);
+      --theme-badge-pending-text: #fff;
+      --theme-badge-submitted-bg: linear-gradient(135deg,#4ade80,#22c55e);
+      --theme-badge-submitted-text: #0a0920;
+      --theme-card-submitted-border-left: #4ade80;
+      --theme-btn-keep-bg: linear-gradient(135deg,#e879f9,#c026d3);
+      --theme-btn-keep-text: #fff;
+      --theme-btn-delete-bg: #2a1850;
+      --theme-btn-delete-text: #c8c4e0;
+      --theme-btn-delete-border: 1px solid #3e2a60;
+
+      --theme-remote-bg: linear-gradient(105deg,#120e1a 0%,#181428 50%,#120e1a 100%);
+      --theme-remote-border: #2a1e40;
+      --theme-remote-border-left: #a070d0;
+      --theme-remote-author-text: #d8c8f0;
+      --theme-remote-content-text: #e0d0f5;
+      --theme-remote-label: #7a6898;
+      --theme-remote-loc: #9080b0;
+      --theme-remote-badge-bg: #2a1e40;
+      --theme-remote-badge-text: #c8b8e0;
+
+      --theme-deleted-bg: linear-gradient(105deg,#1a0e1a 0%,#221422 50%,#1a0e1a 100%);
+      --theme-deleted-border: #2e1a2e;
+      --theme-deleted-border-left: #b71c1c;
+      --theme-deleted-text: #886;
+      --theme-deleted-loc: #775;
+      --theme-deleted-action-bg: #2e1a2e;
+      --theme-deleted-action-text: #c8c4e0;
+      --theme-deleted-badge-bg: #2a1e40;
+      --theme-deleted-badge-text: #9888b0;
+      --theme-toast-shadow: 0 8px 28px rgba(0,0,0,0.5);
+      --theme-toast-overlay: rgba(0,0,0,0.38);
+      --theme-toast-bg: #1d1630;
+      --theme-toast-tint: #291e48;
+      --theme-toast-border: #5a3a9a;
+      --theme-toast-accent: #c084fc;
+      --theme-toast-text: #f7edff;
+      --theme-toast-muted: #d9c7f0;
+      --theme-toast-label-bg: #3a2460;
+      --theme-toast-label-text: #f3e8ff;
+      --theme-toast-shelf-bg: linear-gradient(180deg, transparent 0%, #171124 72%, #171124 100%);
+    }
+
+    /* ===== Theme: Classic Light ===== */
+    body[data-theme="classic-light"] {
+      --theme-card-user-bg: linear-gradient(105deg,#c8d8f8 0%,#d8e4fa 40%,#e0ecff 50%,#d8e4fa 60%,#c8d8f8 100%);
+      --theme-card-user-border: none;
+      --theme-card-user-border-left: #4285f4;
+      --theme-card-user-text: #1a1a2e;
+      --theme-card-user-label: #1a1a2e;
+      --theme-card-user-loc: #333;
+      --theme-card-user-code-bg: rgba(0,0,0,0.08);
+      --theme-card-user-code-border: transparent;
+      --theme-card-user-code-text: #1a1a2e;
+      --theme-card-user-source: rgba(0,0,0,0.06);
+      --theme-card-user-source-text: #999;
+      --theme-card-user-source-link: #4285f4;
+      --theme-card-user-source-border: rgba(0,0,0,0.06);
+
+      --theme-card-agent-bg: linear-gradient(105deg,#f8c8b0 0%,#fad8c0 40%,#fce0d0 50%,#fad8c0 60%,#f8c8b0 100%);
+      --theme-card-agent-border: none;
+      --theme-card-agent-border-left: #ea580c;
+      --theme-card-agent-text: #1a1a1a;
+      --theme-card-agent-label: #1a1a1a;
+      --theme-card-agent-loc: #333;
+      --theme-card-agent-code-bg: rgba(0,0,0,0.08);
+      --theme-card-agent-code-border: transparent;
+      --theme-card-agent-code-text: #1a1a1a;
+      --theme-card-agent-source: #f0f0f0;
+      --theme-card-agent-source-text: #999;
+      --theme-card-agent-source-link: #666;
+      --theme-card-agent-source-border: rgba(0,0,0,0.04);
+
+      --theme-badge-confirmed-bg: #4caf50;
+      --theme-badge-confirmed-text: #fff;
+      --theme-badge-pending-bg: #fff3e0;
+      --theme-badge-pending-text: #ea580c;
+      --theme-badge-submitted-bg: #4caf50;
+      --theme-badge-submitted-text: #fff;
+      --theme-card-submitted-border-left: #4caf50;
+      --theme-btn-keep-bg: #ea580c;
+      --theme-btn-keep-text: #fff;
+      --theme-btn-delete-bg: #f5f5f5;
+      --theme-btn-delete-text: #666;
+      --theme-btn-delete-border: 1px solid #ddd;
+
+      --theme-remote-bg: linear-gradient(105deg,#e8e8e8 0%,#f2f2f2 50%,#e8e8e8 100%);
+      --theme-remote-border: #ccc;
+      --theme-remote-border-left: #999;
+      --theme-remote-author-text: #1a1a2e;
+      --theme-remote-content-text: #1a1a2e;
+      --theme-remote-label: #666;
+      --theme-remote-loc: #555;
+      --theme-remote-badge-bg: #e0e0e0;
+      --theme-remote-badge-text: #444;
+
+      --theme-deleted-bg: linear-gradient(105deg,#fde8e8 0%,#feecec 50%,#fde8e8 100%);
+      --theme-deleted-border: #e0c0c0;
+      --theme-deleted-border-left: #d32f2f;
+      --theme-deleted-text: #888;
+      --theme-deleted-loc: #aaa;
+      --theme-deleted-action-bg: #f0e0e0;
+      --theme-deleted-action-text: #666;
+      --theme-deleted-badge-bg: #e0e0e0;
+      --theme-deleted-badge-text: #888;
+      --theme-toast-shadow: 0 8px 26px rgba(0,0,0,0.2);
+      --theme-toast-overlay: rgba(0,0,0,0.14);
+      --theme-toast-bg: #fffaf4;
+      --theme-toast-tint: #f0f6ff;
+      --theme-toast-border: #8fb5f6;
+      --theme-toast-accent: #4285f4;
+      --theme-toast-text: #172033;
+      --theme-toast-muted: #334155;
+      --theme-toast-label-bg: #4285f4;
+      --theme-toast-label-text: #fff;
+      --theme-toast-shelf-bg: linear-gradient(180deg, transparent 0%, #eef4ff 72%, #eef4ff 100%);
+    }
+
+    /* ===== General Styles ===== */
+    .header { padding: 12px 16px; font-weight: bold; font-size: 13px; border-bottom: 1px solid var(--vscode-panel-border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; background: var(--vscode-sideBar-background); }
+    .header-actions { cursor: pointer; font-size: 11px; color: var(--vscode-descriptionForeground); display: flex; gap: 8px; align-items: center; }
+    .theme-select { background: var(--vscode-dropdown-background); color: var(--vscode-dropdown-foreground); border: 1px solid var(--vscode-dropdown-border); padding: 2px 6px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+    .theme-label { font-size: 10px; color: var(--vscode-descriptionForeground); margin-right: 4px; }
+
+    .branch-section { padding: 8px 12px; border-bottom: 1px solid var(--vscode-panel-border); background: var(--vscode-sideBar-background); }
+    .branch-inputs { display: flex; gap: 4px; margin-bottom: 6px; align-items: center; }
+    .branch-input-wrapper { position: relative; flex: 1; min-width: 0; }
+    .branch-inputs input { width: 100%; box-sizing: border-box; background: var(--vscode-input-background); color: var(--vscode-input-foreground); border: 1px solid var(--vscode-input-border); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+    .branch-inputs input:focus { outline: 1px solid var(--vscode-focusBorder, #007fd4); outline-offset: -1px; }
+    .branch-suggestions { display: none; position: absolute; top: calc(100% + 3px); left: 0; right: 0; z-index: 30; max-height: 156px; overflow-y: auto; border: 1px solid var(--vscode-quickInputList-focusBackground, var(--vscode-dropdown-border)); border-radius: 5px; background: var(--vscode-quickInput-background, var(--vscode-dropdown-background)); box-shadow: 0 6px 18px rgba(0,0,0,0.28); padding: 3px; }
+    .branch-suggestions.visible { display: block; }
+    .branch-suggestion-item { padding: 4px 7px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1.25; color: var(--vscode-quickInput-foreground, var(--vscode-dropdown-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .branch-suggestion-item:hover,
+    .branch-suggestion-item.active { background: var(--vscode-quickInputList-focusBackground, var(--vscode-list-hoverBackground)); color: var(--vscode-quickInputList-focusForeground, var(--vscode-foreground)); }
+    .branch-suggestion-kind { opacity: 0.65; font-size: 10px; margin-left: 4px; }
+    .branch-arrow { color: var(--vscode-descriptionForeground); }
+    .btn { width: 100%; padding: 6px; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; margin-bottom: 4px; }
+    .btn-primary { background: var(--vscode-button-background); color: var(--vscode-button-foreground); }
+    .btn-primary:hover { background: var(--vscode-button-hoverBackground); }
+    .btn-secondary { background: var(--vscode-button-secondaryBackground); color: var(--vscode-button-secondaryForeground); }
+    .btn-secondary:hover { background: var(--vscode-button-secondaryHoverBackground); }
+    .mr-select { width: calc(100% - 28px); background: var(--vscode-dropdown-background); color: var(--vscode-dropdown-foreground); border: 1px solid var(--vscode-dropdown-border); padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-bottom: 6px; }
+    .mr-row { display: flex; gap: 4px; align-items: flex-start; margin-bottom: 4px; }
+    .mr-row .mr-select { margin-bottom: 0; }
+    .mr-refresh-btn { width: 28px; height: 26px; padding: 2px; border: 1px solid var(--vscode-dropdown-border); border-radius: 4px; background: var(--vscode-button-secondaryBackground); color: var(--vscode-button-secondaryForeground); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+    .mr-refresh-btn:hover { background: var(--vscode-button-secondaryHoverBackground); }
+    .mr-hint { padding: 2px 0 4px; font-size: 10px; color: var(--vscode-descriptionForeground); }
+    .mr-hint.missing { color: var(--vscode-errorForeground); }
+
+    .tabs { display: flex; flex-shrink: 0; border-bottom: 1px solid var(--vscode-panel-border); position: sticky; top: 0; z-index: 5; background: var(--vscode-sideBar-background); }
+    .tab { flex: 1; padding: 8px 0; text-align: center; font-size: 12px; cursor: pointer; color: var(--vscode-descriptionForeground); border-bottom: 2px solid transparent; }
+    .tab:hover { color: var(--vscode-foreground); }
+    .tab.active { color: var(--vscode-foreground); border-bottom-color: var(--vscode-button-background); font-weight: 600; }
+    .tab .tab-count { font-size: 10px; opacity: 0.7; }
+
+    .file-list-title { padding: 6px 12px; color: var(--vscode-descriptionForeground); font-size: 11px; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .file-list-title-main { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-list-clear-btn { flex: 0 0 auto; border: 1px solid var(--vscode-button-secondaryBackground); border-radius: 4px; padding: 2px 7px; font-size: 10px; cursor: pointer; background: var(--vscode-button-secondaryBackground); color: var(--vscode-button-secondaryForeground); }
+    .file-list-clear-btn:hover { background: var(--vscode-button-secondaryHoverBackground); }
+    .additions { color: #4caf50; }
+    .deletions { color: #f44336; }
+
+    /* File tree */
+    .file-tree-group { user-select: none; }
+    .file-tree-group-header { padding: 4px 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 12px; }
+    .file-tree-group-header:hover { background: var(--vscode-list-hoverBackground); }
+    .file-tree-group-header .arrow { width: 14px; text-align: center; font-size: 10px; color: var(--vscode-descriptionForeground); }
+    .file-tree-group-header .group-path { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-tree-group-header .group-stats { font-size: 10px; color: var(--vscode-descriptionForeground); }
+    .file-tree-group-children { display: none; }
+    .file-tree-group.expanded > .file-tree-group-children { display: block; }
+    .file-tree-item { padding: 4px 12px 4px 24px; cursor: pointer; display: flex; justify-content: space-between; font-size: 12px; }
+    .file-tree-item:hover { background: var(--vscode-list-hoverBackground); }
+    .file-tree-item .file-icon { margin-right: 4px; font-weight: 600; font-size: 11px; }
+    .file-tree-root-item { padding: 4px 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 12px; }
+    .file-tree-root-item:hover { background: var(--vscode-list-hoverBackground); }
+    .file-tree-root-item .file-icon { margin-right: 4px; font-weight: 600; font-size: 11px; }
+    .file-tree-file-spacer { width: 14px; flex: 0 0 14px; }
+    .file-tree-file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-tree-file-stats { flex: 0 0 auto; }
+    .file-tree-item-active { background: var(--vscode-list-activeSelectionBackground); color: var(--vscode-list-activeSelectionForeground); border-radius: 4px; }
+
+    .comments-header { padding: 6px 12px; color: var(--vscode-descriptionForeground); font-size: 11px; text-transform: uppercase; }
+
+    /* Comment cards */
+    .comment-card { margin: 0 8px 10px 8px; padding: 14px; border-radius: 6px; border: 1px solid; border-left: 3px solid; position: relative; overflow: hidden; }
+    .comment-card.user { background: var(--theme-card-user-bg); border-color: var(--theme-card-user-border); border-left-color: var(--theme-card-user-border-left); }
+    .comment-card.agent { background: var(--theme-card-agent-bg); border-color: var(--theme-card-agent-border); border-left-color: var(--theme-card-agent-border-left); }
+    /* Confirmed agent card uses user card styling */
+    .comment-card.confirmed.agent { background: var(--theme-card-user-bg); border-color: var(--theme-card-user-border); border-left-color: var(--theme-card-agent-border-left); }
+    .comment-card.confirmed.agent .comment-content { color: var(--theme-card-user-text); }
+    .comment-card.confirmed.agent .comment-author .agent-label { color: var(--theme-card-user-label); }
+    .comment-card.confirmed.agent .comment-location { color: var(--theme-card-user-loc); }
+    .comment-card.confirmed.agent .comment-content code { background: var(--theme-card-user-code-bg); border-color: var(--theme-card-user-code-border); color: var(--theme-card-user-code-text); }
+    /* Submitted card green left border */
+    .comment-card.submitted { border-left-color: var(--theme-card-submitted-border-left, #4ade80) !important; }
+    .comment-card.pending { border-left: none; }
+    .comment-card.pending::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: repeating-linear-gradient(180deg, var(--pending-border-color, #666) 0px, var(--pending-border-color, #666) 6px, transparent 6px, transparent 12px); }
+    body[data-theme="piano-dark"] .comment-card.pending.user,
+    body[data-theme="midnight-blue"] .comment-card.pending.user,
+    body[data-theme="nocturne-purple"] .comment-card.pending.user { --pending-border-color: var(--theme-card-user-border-left); }
+    body[data-theme="piano-dark"] .comment-card.pending.agent,
+    body[data-theme="midnight-blue"] .comment-card.pending.agent,
+    body[data-theme="nocturne-purple"] .comment-card.pending.agent { --pending-border-color: var(--theme-card-agent-border-left); }
+    body[data-theme="piano-light"] .comment-card.pending.user { --pending-border-color: #444; }
+    body[data-theme="piano-light"] .comment-card.pending.agent { --pending-border-color: #999; }
+    body[data-theme="classic-light"] .comment-card.pending.user { --pending-border-color: #4285f4; }
+    body[data-theme="classic-light"] .comment-card.pending.agent { --pending-border-color: #ea580c; }
+    body[data-theme="piano-dark"] .comment-card.user,
+    body[data-theme="piano-dark"] .comment-card.agent { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    body[data-theme="piano-light"] .comment-card.user { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    body[data-theme="piano-light"] .comment-card.agent { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    body[data-theme="midnight-blue"] .comment-card.user,
+    body[data-theme="midnight-blue"] .comment-card.agent { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    body[data-theme="nocturne-purple"] .comment-card.user,
+    body[data-theme="nocturne-purple"] .comment-card.agent { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    body[data-theme="classic-light"] .comment-card.user,
+    body[data-theme="classic-light"] .comment-card.agent { border-left-width: 4px; }
+    body[data-theme="classic-light"] .comment-badge { border-radius: 4px; top: 8px; padding: 2px 8px; }
+    body[data-theme="classic-light"] .comment-content code { padding: 1px 4px; font-weight: normal; border: none; }
+    .comment-card.submitted { }
+    .comment-card.deleted { background: var(--theme-deleted-bg); border-color: var(--theme-deleted-border); border-left-color: var(--theme-deleted-border-left); }
+    .comment-card.deleted .comment-content { color: var(--theme-deleted-text); text-decoration: line-through; }
+    .comment-card.deleted .comment-location { color: var(--theme-deleted-loc); }
+    .comment-card.deleted .comment-action { background: var(--theme-deleted-action-bg); color: var(--theme-deleted-action-text); }
+
+    /* Highlight newly added comment */
+    .comment-card.highlight { animation: highlightPulse 1.5s ease-out; }
+    @keyframes highlightPulse {
+      0% { box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5); }
+      100% { box-shadow: none; }
+    }
+
+    .comment-badge { position: absolute; top: 10px; right: 10px; padding: 2px 6px; border-radius: 2px; font-size: 9px; font-weight: 700; }
+    .badge-confirmed { background: var(--theme-badge-confirmed-bg); color: var(--theme-badge-confirmed-text); }
+    .badge-submitted { background: var(--theme-badge-submitted-bg); color: var(--theme-badge-submitted-text); }
+    .badge-pending { background: var(--theme-badge-pending-bg); color: var(--theme-badge-pending-text); font-weight: 600; }
+    .badge-deleted { background: var(--theme-deleted-badge-bg); color: var(--theme-deleted-badge-text); font-size: 9px; }
+
+    .comment-author { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 9px; font-family: var(--vscode-editor-font-family, monospace); }
+    .comment-author .agent-label { color: var(--theme-card-agent-label); font-weight: bold; }
+    .comment-author .user-label { color: var(--theme-card-user-label); }
+    .comment-location { color: var(--vscode-foreground); font-size: 10px; margin-bottom: 6px; font-family: var(--vscode-editor-font-family, monospace); }
+    .comment-card.user .comment-location { color: var(--theme-card-user-loc); }
+    .comment-card.agent .comment-location { color: var(--theme-card-agent-loc); }
+    .comment-content { font-size: 12px; line-height: 1.8; margin-bottom: 6px; }
+    .comment-content p { margin: 0 0 8px; }
+    .comment-content p:last-child { margin-bottom: 0; }
+    .comment-content code { padding: 1px 5px; border-radius: 3px; font-family: var(--vscode-editor-font-family, monospace); font-size: 11px; font-weight: 500; border: 1px solid; }
+    .comment-card.user .comment-content code { background: var(--theme-card-user-code-bg); border-color: var(--theme-card-user-code-border); color: var(--theme-card-user-code-text); }
+    .comment-card.agent .comment-content code { background: var(--theme-card-agent-code-bg); border-color: var(--theme-card-agent-code-border); color: var(--theme-card-agent-code-text); }
+    .comment-content pre { background: rgba(0,0,0,0.06); padding: 8px; border-radius: 4px; overflow-x: auto; margin: 4px 0; }
+    .comment-content pre code { background: none; padding: 0; border: none; }
+    .comment-content ul, .comment-content ol { padding-left: 20px; margin: 4px 0; }
+    .comment-content a { color: var(--vscode-textLink-foreground); }
+    .comment-content strong { font-weight: 600; }
+    .comment-card.user .comment-content { color: var(--theme-card-user-text); }
+    .comment-card.agent .comment-content { color: var(--theme-card-agent-text); }
+
+    .comment-actions { display: flex; gap: 6px; margin-top: 10px; }
+    .comment-action { padding: 3px 8px; border-radius: 3px; font-size: 10px; cursor: pointer; border: none; font-weight: 600; }
+    .action-confirm { background: var(--theme-btn-keep-bg); color: var(--theme-btn-keep-text); }
+    .action-secondary { background: var(--theme-btn-delete-bg); color: var(--theme-btn-delete-text); border: var(--theme-btn-delete-border, none); }
+    .action-undo { background: transparent; color: var(--vscode-descriptionForeground); border: none; cursor: pointer; font-size: 10px; padding: 2px 4px; }
+
+    /* Inline comment editor */
+    .comment-editor { margin-top: 8px; }
+    .comment-editor textarea { width: 100%; min-height: 80px; padding: 8px 10px; border-radius: 4px; border: 1px solid var(--vscode-input-border); background: var(--vscode-input-background); color: var(--vscode-input-foreground); font-family: var(--vscode-editor-font-family, monospace); font-size: 12px; line-height: 1.5; resize: vertical; outline: none; }
+    .comment-editor textarea:focus { border-color: var(--vscode-focusBorder, #007fd4); }
+    .comment-editor-actions { display: flex; gap: 6px; margin-top: 6px; }
+    .comment-editor-actions .comment-action { font-size: 10px; padding: 3px 8px; }
+
+    /* Comment tab layout: comments scroll area + sticky button bar */
+    .comments-tab-wrapper { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+    .comments-scroll-area { flex: 1; overflow-y: auto; min-height: 0; }
+    .comments-action-bar { flex-shrink: 0; padding: 8px 12px; border-top: 1px solid var(--vscode-panel-border); display: flex; gap: 8px; background: var(--vscode-sideBar-background); }
+    .comments-action-bar .btn { margin-bottom: 0; }
+    .btn-confirm-all { background: #ea580c; color: #fff; flex: 1; }
+    .btn-confirm-all:hover { background: #c2470a; }
+    .btn-confirm-all:disabled { opacity: 0.5; cursor: not-allowed; }
+    .comments-action-bar .btn-primary { flex: 2; }
+    .action-bar-count { width: 100%; text-align: center; color: var(--vscode-descriptionForeground); font-size: 9px; margin-top: 4px; }
+
+    .submit-section { padding: 8px 12px; border-top: 1px solid var(--vscode-panel-border); }
+    .submit-count { text-align: center; color: var(--vscode-descriptionForeground); font-size: 9px; margin-top: 4px; }
+
+    /* Comment filter bar */
+    .comment-filter-bar { display: flex; gap: 4px; padding: 8px 12px; flex-wrap: wrap; border-bottom: 1px solid var(--vscode-panel-border); background: var(--vscode-sideBar-background); }
+    .filter-toggle { padding: 2px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; border: 1px solid var(--vscode-input-border); background: var(--vscode-input-background); color: var(--vscode-descriptionForeground); display: flex; align-items: center; gap: 4px; }
+    .filter-toggle.active { background: var(--vscode-button-background); color: var(--vscode-button-foreground); border-color: var(--vscode-button-background); }
+    .filter-toggle.refresh-btn { margin-left: auto; }
+    .filter-count { font-size: 9px; opacity: 0.75; }
+
+    /* Remote comment cards - reuse confirmed user card styling */
+    .comment-card.remote { background: var(--theme-card-user-bg); border-color: var(--theme-card-user-border); border-left-color: var(--theme-card-user-border-left); }
+    .comment-card.remote .comment-content { color: var(--theme-card-user-text); font-size: 12px; line-height: 1.6; }
+    .comment-card.remote .comment-author { color: var(--theme-card-user-label); }
+    .comment-card.remote .comment-location { color: var(--theme-card-user-loc); }
+    .comment-card.remote .comment-content code { background: var(--theme-card-user-code-bg); border-color: var(--theme-card-user-code-border); color: var(--theme-card-user-code-text); }
+    .remote-author { color: var(--theme-card-user-label); font-weight: bold; font-size: 9px; }
+    .remote-date { font-size: 10px; color: var(--theme-card-user-loc); }
+    .remote-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--theme-card-user-border); }
+    .remote-badge { padding: 1px 6px; border-radius: 2px; font-size: 9px; font-weight: 700; background: var(--theme-badge-confirmed-bg); color: var(--theme-badge-confirmed-text); flex-shrink: 0; }
+    .remote-file-path { font-size: 11px; color: var(--theme-remote-loc); margin-bottom: 6px; font-family: var(--vscode-editor-font-family, monospace); opacity: 0.85; }
+    .remote-badge.resolved { position: absolute; top: 10px; right: 10px; padding: 2px 6px; background: var(--vscode-testing-iconPassed); color: var(--vscode-button-foreground); }
+
+    /* Unified side-panel notifications */
+    body.has-notifications .comments-scroll-area { padding-bottom: 156px; }
+    #notification-root { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000; pointer-events: none; }
+    .notification-stack { display: flex; flex-direction: column; gap: 9px; padding: 26px 10px 12px; background: var(--theme-toast-shelf-bg, linear-gradient(180deg, transparent 0%, var(--vscode-sideBar-background) 72%, var(--vscode-sideBar-background) 100%)); }
+    .notification-card { pointer-events: auto; position: relative; background: linear-gradient(135deg, var(--theme-toast-bg, var(--vscode-notifications-background, var(--vscode-quickInput-background, var(--vscode-sideBar-background)))) 0%, var(--theme-toast-tint, var(--vscode-notifications-background, var(--vscode-sideBar-background))) 100%); color: var(--theme-toast-text, var(--vscode-notifications-foreground, var(--vscode-foreground))); border: 1px solid var(--theme-toast-border, var(--vscode-notifications-border, var(--vscode-panel-border))); border-left: 0; border-radius: 10px; box-shadow: var(--theme-toast-shadow, 0 8px 28px rgba(0,0,0,0.35)), 0 0 0 1px var(--vscode-focusBorder, transparent); padding: 11px 12px 10px 14px; animation: toastSlideIn 120ms ease-out; }
+    .notification-card::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 4px; border-radius: 0 4px 4px 0; background: var(--theme-toast-accent, var(--vscode-notificationsInfoIcon-foreground, var(--vscode-button-background))); }
+    .notification-card::after { content: '通知'; position: absolute; right: 10px; top: -9px; padding: 1px 6px; border-radius: 999px; font-size: 9px; font-weight: 700; background: var(--theme-toast-label-bg, var(--vscode-badge-background)); color: var(--theme-toast-label-text, var(--vscode-badge-foreground)); letter-spacing: 0.08em; }
+    .notification-card.warning { border-left-color: var(--vscode-notificationsWarningIcon-foreground, #cca700); }
+    .notification-card.error { border-left-color: var(--vscode-notificationsErrorIcon-foreground, #f14c4c); }
+    .notification-card.warning::before { background: var(--vscode-notificationsWarningIcon-foreground, #cca700); }
+    .notification-card.error::before { background: var(--vscode-notificationsErrorIcon-foreground, #f14c4c); }
+    .notification-header { display: flex; align-items: flex-start; gap: 8px; }
+    .notification-icon { width: 16px; flex: 0 0 16px; font-size: 13px; line-height: 18px; }
+    .notification-message { flex: 1; font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+    .notification-close { flex: 0 0 auto; border: none; background: transparent; color: var(--theme-toast-muted, var(--vscode-descriptionForeground)); cursor: pointer; padding: 0 2px; font-size: 15px; line-height: 18px; margin-top: 2px; }
+    .notification-close:hover { color: var(--theme-toast-text, var(--vscode-foreground)); }
+    .notification-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; justify-content: flex-end; }
+    .notification-action { padding: 4px 9px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid var(--vscode-button-border, transparent); background: var(--vscode-button-secondaryBackground); color: var(--vscode-button-secondaryForeground); }
+    .notification-action.primary { background: var(--vscode-button-background); color: var(--vscode-button-foreground); }
+    .notification-action:hover { background: var(--vscode-button-secondaryHoverBackground); }
+    .notification-action.primary:hover { background: var(--vscode-button-hoverBackground); }
+    .notification-input { width: 100%; margin-top: 10px; padding: 6px 8px; border-radius: 4px; border: 1px solid var(--vscode-input-border); background: var(--vscode-input-background); color: var(--vscode-input-foreground); font-family: var(--vscode-font-family); font-size: 12px; outline: none; }
+    .notification-input:focus { border-color: var(--vscode-focusBorder); }
+    .notification-picker { max-height: 180px; overflow-y: auto; margin-top: 8px; border: 1px solid var(--vscode-input-border); border-radius: 4px; background: var(--vscode-dropdown-background); }
+    .notification-picker-item { display: flex; gap: 7px; padding: 7px 8px; cursor: pointer; font-size: 12px; color: var(--vscode-dropdown-foreground); border-bottom: 1px solid var(--vscode-panel-border); }
+    .notification-picker-item:last-child { border-bottom: none; }
+    .notification-picker-item:hover { background: var(--vscode-list-hoverBackground); }
+    .notification-picker-item.selected { background: var(--vscode-list-activeSelectionBackground); color: var(--vscode-list-activeSelectionForeground); }
+    .notification-picker-main { flex: 1; min-width: 0; }
+    .notification-picker-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .notification-picker-desc { font-size: 10px; opacity: 0.75; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .notification-modal-backdrop { pointer-events: auto; position: fixed; inset: 0; background: var(--theme-toast-overlay, rgba(0,0,0,0.28)); z-index: 999; display: flex; align-items: flex-end; padding: 10px; backdrop-filter: blur(1px); }
+    .notification-modal-backdrop .notification-card { width: 100%; }
+    @keyframes toastSlideIn { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="notification-root"></div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+    const BRANCH_SUGGESTION_LIMIT = 5;
+    let state = { comments: [], deletedComments: [], files: [], sourceBranch: '', targetBranch: '', sessionId: null, fetchFailed: false, mrId: '', mrList: [], remoteComments: [], remoteCapabilities: { canResolveRemoteComments: false }, theme: 'piano-dark' };
+    let activeTab = 'files';
+    let expandedGroups = new Set();
+    let highlightCommentIds = new Set();
+    let activeFilters = new Set(['user', 'pending', 'confirmed']);
+    let remoteFilter = new Set(['unresolved', 'unknown']); // toggle: 'unresolved' | 'resolved' | 'unknown'
+    let editingCommentId = null;
+    let editingContent = '';
+    let agentSignature = '';
+    let userSignature = '';
+    let notificationRequests = [];
+    let notificationInputs = {};
+    let notificationSelections = {};
+    let branchSuggestionState = {
+      activeKind: null,
+      source: [],
+      target: [],
+      activeIndex: 0,
+      requestSeq: 0,
+    };
+    // Per-tab scroll positions (key: tab name)
+    let scrollPositions = { files: 0, comments: 0, remote: 0, trash: 0 };
+
+    function saveScrollPosition() {
+      const el = document.querySelector('.comments-scroll-area');
+      if (el) scrollPositions[activeTab] = el.scrollTop;
+    }
+
+    function restoreScrollPosition() {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const el = document.querySelector('.comments-scroll-area');
+          if (el) el.scrollTop = scrollPositions[activeTab] || 0;
+        });
+      });
+    }
+
+    function toggleFilter(type) {
+      if (activeFilters.has(type)) activeFilters.delete(type);
+      else activeFilters.add(type);
+      render();
+    }
+
+    function setRemoteFilter(filter) {
+      if (remoteFilter.has(filter)) remoteFilter.delete(filter);
+      else remoteFilter.add(filter);
+      render();
+    }
+
+    function refreshRemoteComments() {
+      vscode.postMessage({ type: 'refreshRemoteComments' });
+    }
+
+    function renderNotifications() {
+      const root = document.getElementById('notification-root');
+      if (!root) return;
+      document.body.classList.toggle('has-notifications', notificationRequests.length > 0);
+      const modal = notificationRequests.find(n => n.kind === 'input' || n.kind === 'quickPick');
+      const toasts = notificationRequests.filter(n => n.kind === 'toast');
+      const stack = toasts.length ? `<div class="notification-stack">${toasts.map(renderNotificationCard).join('')}</div>` : '';
+      const modalHtml = modal ? `<div class="notification-modal-backdrop">${renderNotificationCard(modal)}</div>` : '';
+      root.innerHTML = modalHtml + stack;
+      if (modal?.kind === 'input') {
+        const input = document.getElementById(`notification-input-${modal.id}`);
+        if (input) {
+          input.focus();
+          input.selectionStart = input.selectionEnd = input.value.length;
+        }
+      }
+    }
+
+    function renderNotificationCard(req) {
+      const icon = req.severity === 'error' ? '&#10060;' : req.severity === 'warning' ? '&#9888;&#65039;' : '&#8505;&#65039;';
+      const actions = renderNotificationActions(req);
+      const body = req.kind === 'input'
+        ? `<input id="notification-input-${escapeAttr(req.id)}" class="notification-input" value="${escapeAttr(notificationInputs[req.id] ?? req.value ?? '')}" placeholder="${escapeAttr(req.placeholder || '')}" oninput="notificationInputs['${escapeJs(req.id)}']=this.value" onkeydown="handleNotificationInputKey(event, '${escapeJs(req.id)}')">`
+        : req.kind === 'quickPick'
+          ? renderNotificationPicker(req)
+          : '';
+      return `<div class="notification-card ${escapeAttr(req.severity || 'info')}" data-notification-id="${escapeAttr(req.id)}">
+        <div class="notification-header">
+          <div class="notification-icon">${icon}</div>
+          <div class="notification-message">${escapeHtml(req.message || '')}</div>
+          <button class="notification-close" title="关闭" onclick="completeNotification('${escapeJs(req.id)}', undefined, true)">&times;</button>
+        </div>
+        ${body}
+        ${actions}
+      </div>`;
+    }
+
+    function renderNotificationActions(req) {
+      if (req.kind === 'input') {
+        return `<div class="notification-actions">
+          <button class="notification-action" onclick="completeNotification('${escapeJs(req.id)}', undefined, true)">取消</button>
+          <button class="notification-action primary" onclick="submitNotificationInput('${escapeJs(req.id)}')">确定</button>
+        </div>`;
+      }
+      if (req.kind === 'quickPick') {
+        return `<div class="notification-actions">
+          <button class="notification-action" onclick="completeNotification('${escapeJs(req.id)}', undefined, true)">取消</button>
+          ${req.canPickMany ? `<button class="notification-action primary" onclick="submitNotificationQuickPick('${escapeJs(req.id)}')">确定</button>` : ''}
+        </div>`;
+      }
+      if (!req.items || req.items.length === 0) return '';
+      return `<div class="notification-actions">
+        ${req.items.map((item, index) => `<button class="notification-action ${index === 0 ? 'primary' : ''}" onclick="completeNotification('${escapeJs(req.id)}', ${index}, false)">${escapeHtml(item.label || item.value || '')}</button>`).join('')}
+      </div>`;
+    }
+
+    function renderNotificationPicker(req) {
+      const selected = notificationSelections[req.id] || new Set((req.items || []).map((item, index) => item.picked ? index : -1).filter(index => index >= 0));
+      notificationSelections[req.id] = selected;
+      return `<div class="notification-picker">
+        ${(req.items || []).map((item, index) => {
+          const isSelected = selected.has(index);
+          return `<div class="notification-picker-item ${isSelected ? 'selected' : ''}" data-notification-pick-id="${escapeAttr(req.id)}" data-notification-pick-index="${index}" onclick="toggleNotificationPick('${escapeJs(req.id)}', ${index})">
+            <span class="notification-picker-mark">${req.canPickMany ? (isSelected ? '&#9745;' : '&#9744;') : (isSelected ? '&#9679;' : '&#9675;')}</span>
+            <span class="notification-picker-main">
+              <div class="notification-picker-label">${escapeHtml(item.label || '')}</div>
+              ${item.description || item.detail ? `<div class="notification-picker-desc">${escapeHtml(item.description || item.detail || '')}</div>` : ''}
+            </span>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+
+    function findNotification(id) {
+      return notificationRequests.find(n => n.id === id);
+    }
+
+    function removeNotification(id) {
+      notificationRequests = notificationRequests.filter(n => n.id !== id);
+      delete notificationInputs[id];
+      delete notificationSelections[id];
+      renderNotifications();
+    }
+
+    function completeNotification(id, itemIndex, dismissed) {
+      const req = findNotification(id);
+      const item = typeof itemIndex === 'number' ? req?.items?.[itemIndex] : undefined;
+      vscode.postMessage({ type: 'notificationResponse', id, dismissed: !!dismissed, value: item });
+      removeNotification(id);
+    }
+
+    function submitNotificationInput(id) {
+      const value = notificationInputs[id] ?? document.getElementById(`notification-input-${id}`)?.value ?? '';
+      vscode.postMessage({ type: 'notificationResponse', id, dismissed: false, value });
+      removeNotification(id);
+    }
+
+    function handleNotificationInputKey(event, id) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        submitNotificationInput(id);
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        completeNotification(id, undefined, true);
+      }
+    }
+
+    function toggleNotificationPick(id, index) {
+      const req = findNotification(id);
+      if (!req) return;
+      const selected = notificationSelections[id] || new Set();
+      if (req.canPickMany) {
+        if (selected.has(index)) selected.delete(index);
+        else selected.add(index);
+        notificationSelections[id] = selected;
+        syncNotificationPickerSelection(req);
+      } else {
+        notificationSelections[id] = new Set([index]);
+        submitNotificationQuickPick(id);
+      }
+    }
+
+    function syncNotificationPickerSelection(req) {
+      const selected = notificationSelections[req.id] || new Set();
+      document.querySelectorAll(`[data-notification-pick-id="${cssEscape(req.id)}"]`).forEach((el) => {
+        const index = Number(el.getAttribute('data-notification-pick-index'));
+        const isSelected = selected.has(index);
+        el.classList.toggle('selected', isSelected);
+        const mark = el.querySelector('.notification-picker-mark');
+        if (mark) mark.innerHTML = req.canPickMany ? (isSelected ? '&#9745;' : '&#9744;') : (isSelected ? '&#9679;' : '&#9675;');
+      });
+    }
+
+    function submitNotificationQuickPick(id) {
+      const req = findNotification(id);
+      if (!req) return;
+      const selected = notificationSelections[id] || new Set();
+      const values = Array.from(selected).sort((a, b) => a - b).map(index => req.items[index]).filter(Boolean);
+      vscode.postMessage({ type: 'notificationResponse', id, dismissed: req.canPickMany ? false : values.length === 0, value: req.canPickMany ? values : values[0] });
+      removeNotification(id);
+    }
+
+    function render() {
+      const app = document.getElementById('app');
+      // Save scroll position on the correct container for the active tab
+      saveScrollPosition();
+
+      // Apply theme to body
+      document.body.setAttribute('data-theme', state.theme || 'piano-dark');
+
+      const mrSelect = renderMRSelect();
+      app.innerHTML = `
+        <div class="header">
+          <span>代码评审</span>
+          <span class="header-actions">
+            <span class="theme-label">主题</span>
+            <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
+              <option value="piano-dark" ${state.theme === 'piano-dark' ? 'selected' : ''}>Piano Dark</option>
+              <option value="piano-light" ${state.theme === 'piano-light' ? 'selected' : ''}>Piano Light</option>
+              <option value="midnight-blue" ${state.theme === 'midnight-blue' ? 'selected' : ''}>Midnight Blue</option>
+              <option value="nocturne-purple" ${state.theme === 'nocturne-purple' ? 'selected' : ''}>Nocturne Purple</option>
+              <option value="classic-light" ${state.theme === 'classic-light' ? 'selected' : ''}>Classic Light</option>
+            </select>
+            <span onclick="installSkill()">&#128230; 安装技能</span>
+            <span onclick="vscode.postMessage({type: 'settings'})">&#9881;&#65039; 设置</span>
+          </span>
+        </div>
+        ${state.fetchFailed ? '<div style="padding:8px 12px;background:#f4433622;color:#f44336;font-size:11px;border-bottom:1px solid var(--vscode-panel-border);">&#9888;&#65039; 远程同步失败，Diff 可能过期</div>' : ''}
+        <div class="branch-section">
+          <div class="mr-row">
+            <select class="mr-select" id="mrSelect" onchange="selectMR(this.value)">
+              ${mrSelect}
+            </select>
+            <button class="mr-refresh-btn" title="刷新 MR 列表" onclick="loadMRs()">&#8635;</button>
+          </div>
+          ${state.mrId
+            ? `<div class="mr-hint">已关联 MR: #${state.mrId}</div>`
+            : `<div class="mr-hint missing">未关联 MR，无法提交评论</div>`}
+          <div class="branch-inputs">
+            <div class="branch-input-wrapper">
+              <input id="sourceBranch" placeholder="源分支" value="${escapeAttr(state.sourceBranch)}" autocomplete="off" onfocus="handleBranchFocus('source')" oninput="handleBranchInput('source')" onkeydown="handleBranchKeydown(event, 'source')" onblur="hideBranchSuggestionsSoon()">
+              <div id="sourceBranchSuggestions" class="branch-suggestions"></div>
+            </div>
+            <span class="branch-arrow">&rarr;</span>
+            <div class="branch-input-wrapper">
+              <input id="targetBranch" placeholder="目标分支 (输入 {init} 评审全部文件)" value="${escapeAttr(state.targetBranch)}" autocomplete="off" onfocus="handleBranchFocus('target')" oninput="handleBranchInput('target')" onkeydown="handleBranchKeydown(event, 'target')" onblur="hideBranchSuggestionsSoon()">
+              <div id="targetBranchSuggestions" class="branch-suggestions"></div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="openDiff()">&#128640; 打开对比</button>
+        </div>
+        <div class="panel-content">
+          ${renderTabs()}
+          ${renderTabContent()}
+        </div>
+      `;
+      // Restore scroll position on the correct container for the active tab
+      restoreScrollPosition();
+
+      setTimeout(() => {
+        // Only scroll to highlight if there are actually new comments
+        if (highlightCommentIds.size === 0) return;
+        highlightCommentIds.forEach(id => {
+          const el = document.getElementById(`comment-${id}`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+        highlightCommentIds.clear();
+      }, 50);
+      setTimeout(() => refreshActiveBranchSuggestions(), 0);
+    }
+
+    function renderTabs() {
+      const nonDeleted = state.comments.length;
+      const deletedCount = state.deletedComments.length;
+      const remoteCount = (state.remoteComments || []).length;
+      return `
+        <div class="tabs">
+          <div class="tab ${activeTab === 'files' ? 'active' : ''}" onclick="switchTab('files')">
+            变更文件 <span class="tab-count">(${state.files.length})</span>
+          </div>
+          <div class="tab ${activeTab === 'comments' ? 'active' : ''}" onclick="switchTab('comments')">
+            当前评论 <span class="tab-count">(${nonDeleted})</span>
+          </div>
+          <div class="tab ${activeTab === 'remote' ? 'active' : ''}" onclick="switchTab('remote')">
+            远端评论 <span class="tab-count">(${remoteCount})</span>
+          </div>
+          <div class="tab ${activeTab === 'trash' ? 'active' : ''}" onclick="switchTab('trash')">
+            回收站 <span class="tab-count">(${deletedCount})</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMRSelect() {
+      const mrList = state.mrList || [];
+      const currentMR = state.mrId;
+      let options = '<option value="">▼ 选择 MR...</option>';
+      if (mrList.length > 0) {
+        for (const mr of mrList) {
+          const selected = currentMR && String(mr.id) === String(currentMR) ? 'selected' : '';
+          options += `<option value="${escapeAttr(mr.id)}" ${selected}>#${escapeHtml(mr.id)} ${escapeHtml(mr.title || '')} (${escapeHtml(mr.sourceBranch || '')} → ${escapeHtml(mr.targetBranch || '')})</option>`;
+        }
+      }
+      return options;
+    }
+
+    function renderTabContent() {
+      if (activeTab === 'files') return renderFileList();
+      if (activeTab === 'comments') return renderComments();
+      if (activeTab === 'remote') return renderRemoteComments();
+      if (activeTab === 'trash') return renderTrash();
+      return '';
+    }
+
+    function switchTab(tab) {
+      // Save current tab's scroll position BEFORE switching
+      saveScrollPosition();
+      activeTab = tab;
+      render();
+    }
+
+    function changeTheme(theme) {
+      vscode.postMessage({ type: 'changeTheme', theme });
+      state.theme = theme;
+      render();
+    }
+
+    function installSkill() {
+      vscode.postMessage({ type: 'installSkill' });
+    }
+
+    // ===== File Tree =====
+
+    const FILE_TREE_BASE_PADDING = 12;
+    const FILE_TREE_INDENT_STEP = 16;
+
+    function getFileTreePadding(depth) {
+      return FILE_TREE_BASE_PADDING + depth * FILE_TREE_INDENT_STEP;
+    }
+
+    function buildFileTree(files) {
+      const root = { __files: [] };
+      for (const f of files) {
+        if (!f || !f.filePath) continue;
+        const parts = f.filePath.split('/');
+        let node = root;
+        for (let i = 0; i < parts.length - 1; i++) {
+          if (!node[parts[i]]) node[parts[i]] = { __files: [] };
+          node = node[parts[i]];
+        }
+        if (!node.__files) node.__files = [];
+        node.__files.push(f);
+      }
+      return root;
+    }
+
+    function renderFileTreeNode(tree, prefix, depth) {
+      let html = '';
+      const dirs = [];
+      const directFiles = tree.__files || [];
+
+      for (const key of Object.keys(tree)) {
+        if (key === '__files') continue;
+        dirs.push({ name: key, children: tree[key] });
+      }
+
+      for (const dir of dirs) {
+        const isExpanded = expandedGroups.has(prefix + dir.name);
+        const arrow = isExpanded ? '▼' : '▶';
+
+        const mergedPath = getCollapsePath(dir.children, dir.name, prefix);
+        const displayPath = mergedPath + '/';
+        const collapsedNode = getCollapsedNode(dir.children, dir.name);
+        const dirFiles = countFiles(collapsedNode);
+
+        html += `<div class="file-tree-group ${isExpanded ? 'expanded' : ''}" data-path="${escapeAttr(prefix + dir.name)}">
+          <div class="file-tree-group-header" onclick="toggleGroup(this.dataset.path)" data-path="${escapeAttr(prefix + dir.name)}" style="padding-left: ${getFileTreePadding(depth)}px">
+            <span class="arrow">${arrow}</span>
+            <span class="group-path">${escapeHtml(displayPath)}</span>
+            <span class="group-stats">${dirFiles} 个文件</span>
+          </div>
+          <div class="file-tree-group-children">
+            ${renderFileTreeNode(collapsedNode, prefix + mergedPath + '/', depth + 1)}
+          </div>
+        </div>`;
+      }
+
+      for (const f of directFiles) {
+        const ext = f.filePath.split('.').pop() || '';
+        const icon = getFileIcon(ext);
+        const iconSpan = icon ? `<span class="file-icon">${icon}</span>` : '';
+        const isActive = state.activeFilePath === f.filePath ? 'file-tree-item-active' : '';
+        html += `<div class="file-tree-root-item ${isActive}" onclick="openFileFromElement(this)" data-file-path="${escapeAttr(f.filePath)}" style="padding-left: ${getFileTreePadding(depth)}px">
+          <span class="file-tree-file-spacer"></span>
+          <span class="file-tree-file-name">${iconSpan}${escapeHtml(f.filePath.split('/').pop())}</span>
+          <span class="file-tree-file-stats"><span class="additions">+${f.additions}</span> <span class="deletions">-${f.deletions}</span></span>
+        </div>`;
+      }
+
+      return html;
+    }
+
+    function getCollapsedNode(node, dirName) {
+      let current = node;
+      while (shouldCollapse(current)) {
+        const keys = Object.keys(current).filter(k => k !== '__files');
+        current = current[keys[0]];
+      }
+      return current;
+    }
+
+    function getFileIcon(ext) {
+      const iconMap = {
+        ts: { label: 'TS', color: '#3178c6' }, tsx: { label: 'TSX', color: '#3178c6' },
+        js: { label: 'JS', color: '#f7df1e' }, jsx: { label: 'JSX', color: '#f7df1e' },
+        json: { label: '{}', color: '#f7df1e' },
+        css: { label: '#', color: '#563d7c' },
+        html: { label: '<>', color: '#e34f26' },
+        md: { label: 'MD', color: '#083fa1' },
+        yaml: { label: 'Y', color: '#cb171e' }, yml: { label: 'Y', color: '#cb171e' },
+        vue: { label: 'V', color: '#41b883' },
+        py: { label: 'PY', color: '#3572a5' },
+        go: { label: 'GO', color: '#00add8' },
+        java: { label: 'J', color: '#b07219' },
+      };
+      const info = iconMap[ext.toLowerCase()];
+      return info ? `<span style="color:${info.color}">${info.label}</span>` : '';
+    }
+
+    function countFiles(node) {
+      let count = (node.__files || []).length;
+      for (const key of Object.keys(node)) {
+        if (key === '__files') continue;
+        count += countFiles(node[key]);
+      }
+      return count;
+    }
+
+    function collectAllGroups() {
+      function walk(node, prefix) {
+        for (const key of Object.keys(node)) {
+          if (key === '__files') continue;
+          const path = prefix + key;
+          expandedGroups.add(path);
+          walk(node[key], path + '/');
+        }
+      }
+      walk(buildFileTree(state.files || []), '');
+    }
+
+    function shouldCollapse(node) {
+      const keys = Object.keys(node).filter(k => k !== '__files');
+      return (node.__files || []).length === 0 && keys.length === 1;
+    }
+
+    function getCollapsePath(node, dirName, basePrefix) {
+      let result = dirName;
+      let current = node;
+      while (shouldCollapse(current)) {
+        const childName = Object.keys(current).filter(k => k !== '__files')[0];
+        result += '/' + childName;
+        current = current[childName];
+      }
+      return result;
+    }
+
+    function toggleGroup(path) {
+      if (expandedGroups.has(path)) {
+        expandedGroups.delete(path);
+      } else {
+        expandedGroups.add(path);
+      }
+      render();
+    }
+
+    function renderFileList() {
+      if (!state.files.length) return '<div style="padding:12px;color:var(--vscode-descriptionForeground);font-size:12px;text-align:center;">暂无变更文件</div>';
+      const totalAdd = state.files.reduce((s, f) => s + f.additions, 0);
+      const totalDel = state.files.reduce((s, f) => s + f.deletions, 0);
+      const tree = buildFileTree(state.files);
+      return `
+        <div class="comments-tab-wrapper">
+          <div class="file-list-title">
+            <span class="file-list-title-main">变更文件 (${state.files.length}) &middot; <span class="additions">+${totalAdd}</span> <span class="deletions">-${totalDel}</span></span>
+            <button class="file-list-clear-btn" onclick="clearReview()" title="清空当前对比的变更文件和所有评论">清空对比</button>
+          </div>
+          <div class="comments-scroll-area">
+            ${renderFileTreeNode(tree, '', 0)}
+          </div>
+        </div>
+      `;
+    }
+
+    // ===== Comments =====
+
+    function renderComments() {
+      const comments = state.comments;
+      if (!comments.length) {
+        return `
+          <div class="comments-tab-wrapper">
+            <div class="comments-scroll-area" style="display:flex;align-items:center;justify-content:center;">
+              <div style="padding:12px;color:var(--vscode-descriptionForeground);font-size:12px;text-align:center;">暂无评论</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const userConfirmedCount = comments.filter(c => c.author === 'user' && c.status === 'confirmed').length;
+      const pendingCount = comments.filter(c => c.author === 'agent' && c.status === 'pending').length;
+      const confirmedCount = comments.filter(c => c.author === 'agent' && c.status === 'confirmed').length;
+      const submittedCount = comments.filter(c => c.status === 'submitted').length;
+
+      const filtered = comments.filter(c => {
+        if (c.author === 'user' && c.status === 'confirmed') return activeFilters.has('user');
+        if (c.author === 'agent' && c.status === 'pending') return activeFilters.has('pending');
+        if (c.author === 'agent' && c.status === 'confirmed') return activeFilters.has('confirmed');
+        if (c.status === 'submitted') return activeFilters.has('submitted');
+        return false;
+      }).sort(commentSortFn);
+
+      const submittable = comments.filter(c =>
+        (c.author === 'user' && c.status !== 'submitted') ||
+        (c.author === 'agent' && c.status === 'confirmed')
+      ).length;
+      const hasSubmittable = submittable > 0 || submittedCount > 0;
+
+      return `
+        <div class="comments-tab-wrapper">
+          <div class="comment-filter-bar">
+            <span class="filter-toggle ${activeFilters.has('user') ? 'active' : ''}" onclick="toggleFilter('user')">&#128100; 用户已确认 <span class="filter-count">(${userConfirmedCount})</span></span>
+            <span class="filter-toggle ${activeFilters.has('pending') ? 'active' : ''}" onclick="toggleFilter('pending')">&#129302; AI待确认 <span class="filter-count">(${pendingCount})</span></span>
+            <span class="filter-toggle ${activeFilters.has('confirmed') ? 'active' : ''}" onclick="toggleFilter('confirmed')">&#129302; AI已确认 <span class="filter-count">(${confirmedCount})</span></span>
+            <span class="filter-toggle ${activeFilters.has('submitted') ? 'active' : ''}" onclick="toggleFilter('submitted')">&#10003; 已提交 <span class="filter-count">(${submittedCount})</span></span>
+          </div>
+          <div class="comments-scroll-area">
+            ${filtered.map(c => renderCommentCard(c)).join('')}
+            ${filtered.length === 0 ? '<div style="padding:12px;color:var(--vscode-descriptionForeground);font-size:12px;text-align:center;">无匹配的评论</div>' : ''}
+          </div>
+          ${pendingCount > 0 || submittable > 0 || submittedCount > 0 ? `
+          <div class="comments-action-bar">
+            <button class="btn btn-confirm-all" onclick="vscode.postMessage({type: 'confirmAllAgent'})" ${pendingCount === 0 ? 'disabled' : ''}>&#129302; 全部确认 (${pendingCount})</button>
+            <button class="btn btn-primary" onclick="vscode.postMessage({type: 'submitAll'})" ${submittable === 0 ? 'disabled' : ''}>&#128228; 提交全部 (${submittable})</button>
+          </div>
+          ${submittable > 0 || submittedCount > 0 ? `<div class="action-bar-count">${submittable} 待提交 &middot; ${submittedCount} 已提交</div>` : ''}
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderTrash() {
+      if (!state.deletedComments.length) return '<div style="padding:12px;color:var(--vscode-descriptionForeground);font-size:12px;text-align:center;">回收站为空</div>';
+      const sorted = [...state.deletedComments].sort(commentSortFn);
+      return `
+        <div class="comments-tab-wrapper">
+          <div class="comments-header">回收站 (${state.deletedComments.length})</div>
+          <div class="comments-scroll-area">
+            ${sorted.map(c => renderTrashCard(c)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    /** Sort comments by file path (alphabetically) then by line number. */
+    function commentSortFn(a, b) {
+      const fa = a.filePath || '';
+      const fb = b.filePath || '';
+      if (fa !== fb) return fa.localeCompare(fb);
+      return (a.lineNumber || 0) - (b.lineNumber || 0);
+    }
+
+    function renderRemoteComments() {
+      const allComments = state.remoteComments || [];
+      const refreshBar = state.mrId ? `
+          <div class="comment-filter-bar">
+            <span class="filter-toggle refresh-btn" onclick="refreshRemoteComments()" title="刷新远端评论">&#x21bb; 刷新</span>
+          </div>` : '';
+      if (!allComments.length) {
+        return `
+          <div class="comments-tab-wrapper">
+            ${refreshBar}
+            <div class="comments-scroll-area" style="display:flex;align-items:center;justify-content:center;">
+              <div style="padding:12px;color:var(--vscode-descriptionForeground);font-size:12px;text-align:center;">暂无远端评论${state.mrId ? '' : '，请先关联 MR'}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const getResolution = c => c.resolution || (c.resolved === true ? 'resolved' : (c.resolved === false ? 'unresolved' : 'unknown'));
+      const unresolvedCount = allComments.filter(c => getResolution(c) === 'unresolved').length;
+      const resolvedCount = allComments.filter(c => getResolution(c) === 'resolved').length;
+      const unknownCount = allComments.filter(c => getResolution(c) === 'unknown').length;
+
+      const filtered = allComments.filter(c => {
+        return remoteFilter.has(getResolution(c));
+      }).sort(commentSortFn);
+
+      return `
+        <div class="comments-tab-wrapper">
+          <div class="comment-filter-bar">
+            <span class="filter-toggle ${remoteFilter.has('resolved') ? 'active' : ''}" onclick="setRemoteFilter('resolved')">已解决 <span class="filter-count">(${resolvedCount})</span></span>
+            <span class="filter-toggle ${remoteFilter.has('unresolved') ? 'active' : ''}" onclick="setRemoteFilter('unresolved')">未解决 <span class="filter-count">(${unresolvedCount})</span></span>
+            <span class="filter-toggle ${remoteFilter.has('unknown') ? 'active' : ''}" onclick="setRemoteFilter('unknown')">状态未知 <span class="filter-count">(${unknownCount})</span></span>
+            <span class="filter-toggle refresh-btn" onclick="refreshRemoteComments()" title="刷新远端评论">&#x21bb; 刷新</span>
+          </div>
+          <div class="comments-scroll-area">
+            ${filtered.map(c => renderRemoteCommentCard(c)).join('')}
+            ${filtered.length === 0 ? '<div style="padding:12px;color:var(--vscode-descriptionForeground);font-size:12px;text-align:center;">无匹配的评论</div>' : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRemoteCommentCard(c) {
+      const location = c.filePath ? `${c.filePath}:${c.lineNumber}` : '全局评论';
+      const date = c.createdAt ? new Date(c.createdAt).toLocaleDateString('zh-CN') : '';
+      const resolution = c.resolution || (c.resolved === true ? 'resolved' : (c.resolved === false ? 'unresolved' : 'unknown'));
+      const resolvedBadge = resolution === 'resolved' ? '<span class="remote-badge resolved">&#10003; 已解决</span>' :
+        resolution === 'unknown' ? '<span class="remote-badge resolved">状态未知</span>' : '';
+      const canResolve = resolution === 'unresolved' && c.canResolve && state.remoteCapabilities && state.remoteCapabilities.canResolveRemoteComments;
+      const actions = canResolve
+        ? `<div class="comment-actions"><button class="comment-action action-confirm" onclick="event.stopPropagation(); vscode.postMessage({type: 'resolveRemoteComment', id: '${escapeAttr(c.id)}'})">Resolve</button></div>`
+        : '';
+      const clickHandler = c.filePath
+        ? `onclick="openFileAtLine(event, this)" data-file-path="${escapeAttr(c.filePath)}" data-line-number="${escapeAttr(normalizeLineNumber(c.lineNumber))}"`
+        : '';
+      return `<div class="comment-card remote ${resolution === 'resolved' ? 'resolved' : ''}" ${clickHandler}>
+        ${resolvedBadge}
+        <div class="remote-header">
+          <span class="remote-badge">远端</span>
+          <span class="remote-author">${escapeHtml(c.author)}</span>
+          <span class="remote-date">${date}</span>
+        </div>
+        <div class="remote-file-path">${escapeHtml(location)}</div>
+        <div class="comment-content">${renderMarkdown(c.content)}</div>
+        ${actions}
+      </div>`;
+    }
+
+    function renderCommentCard(c) {
+      const isAgent = c.author === 'agent';
+      const authorLabel = isAgent ? `<span class="agent-label">&#129302; AI</span>` : `<span class="user-label">&#128100; 我</span>`;
+      const badge = c.status === 'submitted' ? `<span class="comment-badge badge-submitted">&#10003; 已提交</span>` :
+                    c.status === 'confirmed' ? `<span class="comment-badge badge-confirmed">已确认</span>` :
+                    c.status === 'pending' && isAgent ? `<span class="comment-badge badge-pending">待确认</span>` : '';
+
+      const isHighlighted = highlightCommentIds.has(c.id) ? 'highlight' : '';
+      const isEditing = editingCommentId === c.id;
+
+      if (isEditing) {
+        return `<div id="comment-${escapeAttr(c.id)}" class="comment-card ${isAgent ? 'agent' : 'user'} ${escapeAttr(c.status)}">
+          ${badge}
+          <div class="comment-author">${authorLabel}</div>
+          <div class="comment-location">${escapeHtml(c.filePath)}:${escapeHtml(normalizeLineNumber(c.lineNumber))}</div>
+          <div class="comment-editor">
+            <textarea id="editor-${c.id}" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();saveEdit('${escapeAttr(c.id)}')}">${escapeHtml(editingContent)}</textarea>
+            <div class="comment-editor-actions">
+              <button class="comment-action action-confirm" onclick="event.stopPropagation(); saveEdit('${escapeAttr(c.id)}')">&#10003; 保存</button>
+              <button class="comment-action action-secondary" onclick="event.stopPropagation(); cancelEdit()">&#10007; 取消</button>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      let actions = '';
+      if (c.status === 'pending' && isAgent) {
+        actions = `<button class="comment-action action-confirm" onclick="event.stopPropagation(); vscode.postMessage({type: 'confirmComment', id: '${escapeAttr(c.id)}'})">&#10003; 保留</button>
+                   <button class="comment-action action-secondary" onclick="event.stopPropagation(); vscode.postMessage({type: 'deleteComment', id: '${escapeAttr(c.id)}'})">&#10007; 删除</button>
+                   <button class="comment-action action-secondary" onclick="event.stopPropagation(); vscode.postMessage({type: 'startEdit', id: '${escapeAttr(c.id)}'})">&#9998; 编辑</button>`;
+      } else if (c.status === 'confirmed') {
+        actions = `<button class="comment-action action-secondary" onclick="event.stopPropagation(); vscode.postMessage({type: 'deleteComment', id: '${escapeAttr(c.id)}'})">&#10007; 删除</button>
+                   <button class="comment-action action-secondary" onclick="event.stopPropagation(); startEdit('${escapeAttr(c.id)}')">&#9998; 编辑</button>`;
+      }
+
+      return `<div id="comment-${escapeAttr(c.id)}" class="comment-card ${isAgent ? 'agent' : 'user'} ${escapeAttr(c.status)} ${isHighlighted}" onclick="openFileAtLine(event, this)" data-file-path="${escapeAttr(c.filePath)}" data-line-number="${escapeAttr(normalizeLineNumber(c.lineNumber))}">
+        ${badge}
+        <div class="comment-author">${authorLabel}</div>
+        <div class="comment-location">${escapeHtml(c.filePath)}:${escapeHtml(normalizeLineNumber(c.lineNumber))}</div>
+        <div class="comment-content">${renderMarkdown(c.content)}</div>
+        <div class="comment-actions">${actions}</div>
+      </div>`;
+    }
+
+    function escapeRegex(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function startEdit(id) {
+      vscode.postMessage({type: 'startEdit', id});
+    }
+
+    function cancelEdit() {
+      editingCommentId = null;
+      editingContent = '';
+      render();
+    }
+
+    function saveEdit(id) {
+      const ta = document.getElementById('editor-' + id);
+      if (!ta) return;
+      let content = ta.value.trim();
+      if (!content) return;
+      editingCommentId = null;
+      editingContent = '';
+      vscode.postMessage({type: 'editComment', id: id, currentContent: content});
+    }
+
+    function renderTrashCard(c) {
+      const isAgent = c.author === 'agent';
+      const authorLabel = isAgent ? `<span class="agent-label">&#129302; AI</span>` : `<span class="user-label">&#128100; 我</span>`;
+      return `<div class="comment-card deleted" onclick="openFileAtLine(event, this)" data-file-path="${escapeAttr(c.filePath)}" data-line-number="${escapeAttr(normalizeLineNumber(c.lineNumber))}">
+        <span class="comment-badge badge-deleted">已删除</span>
+        <div class="comment-author">${authorLabel}</div>
+        <div class="comment-location">${escapeHtml(c.filePath)}:${escapeHtml(normalizeLineNumber(c.lineNumber))}</div>
+        <div class="comment-content">${escapeHtml(c.content)}</div>
+        <div class="comment-actions">
+          <button class="comment-action action-undo" onclick="event.stopPropagation(); vscode.postMessage({type: 'undoDeleteComment', id: '${escapeAttr(c.id)}'})">&#8617; 恢复</button>
+        </div>
+      </div>`;
+    }
+
+    // ===== Simple Markdown Renderer =====
+
+    function renderMarkdown(text) {
+      if (!text) return '';
+      const codeBlocks = [];
+      text = text.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
+        codeBlocks.push(escapeHtml(code));
+        return `%%CODEBLOCK${codeBlocks.length - 1}%%`;
+      });
+      const inlineCodes = [];
+      text = text.replace(/`([^`]+)`/g, (_, code) => {
+        inlineCodes.push(escapeHtml(code));
+        return `%%INLINECODE${inlineCodes.length - 1}%%`;
+      });
+      let html = escapeHtml(text);
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, url) => {
+        const safeHref = sanitizeHref(url);
+        return safeHref
+          ? `<a href="${escapeAttr(safeHref)}" onclick="event.preventDefault()">${label}</a>`
+          : label;
+      });
+      html = html.replace(/^(-\s.+)$/gm, '%%LI%%$1%%/LI%%');
+      html = html.replace(/(%%LI%%[^%]+%%\/LI%%(?:<br>%%LI%%[^%]+%%\/LI%%)*)/g, (match) => {
+        const items = match.replace(/%%LI%%-\s/g, '<li>').replace(/%%\/LI%%/g, '</li>').replace(/<br>/g, '');
+        return '<ul>' + items + '</ul>';
+      });
+      for (let i = 0; i < codeBlocks.length; i++) {
+        html = html.replace(`%%CODEBLOCK${i}%%`, '<pre><code>' + codeBlocks[i] + '</code></pre>');
+      }
+      for (let i = 0; i < inlineCodes.length; i++) {
+        html = html.replace(`%%INLINECODE${i}%%`, '<code>' + inlineCodes[i] + '</code>');
+      }
+      html = html.replace(/\n/g, '<br>');
+      html = html.replace(/<br>(<\/?[uo]l>)/g, '$1');
+      html = html.replace(/(<\/?[uo]l>)<br>/g, '$1');
+      html = html.replace(/<br>(<\/?pre>)/g, '$1');
+      html = html.replace(/(<\/?pre>)<br>/g, '$1');
+      return html;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function escapeAttr(text) {
+      return String(text).replace(/&/g, '&amp;').replace(/'/g, '&#39;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function escapeJs(text) {
+      return String(text).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+    }
+
+    function cssEscape(text) {
+      return typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(String(text)) : String(text).replace(/"/g, '\\"');
+    }
+
+    function sanitizeHref(url) {
+      const value = String(url || '').trim();
+      try {
+        const parsed = new URL(value);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.href : '';
+      } catch {
+        return '';
+      }
+    }
+
+    function normalizeLineNumber(lineNumber) {
+      const line = Number(lineNumber);
+      return Number.isFinite(line) && line > 0 ? line : 1;
+    }
+
+    function handleBranchFocus(kind) {
+      branchSuggestionState.activeKind = kind;
+      branchSuggestionState.activeIndex = 0;
+      if (kind === 'source') {
+        // Source branch is intentionally fetched on every focus and not cached.
+        vscode.postMessage({ type: 'getBranchSuggestions', kind, requestId: ++branchSuggestionState.requestSeq });
+      } else {
+        vscode.postMessage({ type: 'getBranchSuggestions', kind, requestId: ++branchSuggestionState.requestSeq });
+      }
+      refreshActiveBranchSuggestions();
+    }
+
+    function handleBranchInput(kind) {
+      clearMR();
+      const input = getBranchInput(kind);
+      if (kind === 'source') state.sourceBranch = input?.value || '';
+      else state.targetBranch = input?.value || '';
+      branchSuggestionState.activeKind = kind;
+      branchSuggestionState.activeIndex = 0;
+      refreshActiveBranchSuggestions();
+    }
+
+    function handleBranchKeydown(event, kind) {
+      const visible = getVisibleBranchSuggestions(kind);
+      if (event.key === 'Tab' && kind === 'source') {
+        event.preventDefault();
+        hideBranchSuggestions();
+        document.getElementById('targetBranch')?.focus();
+        return;
+      }
+      if (event.key === 'ArrowDown' && visible.length > 0) {
+        event.preventDefault();
+        branchSuggestionState.activeIndex = (branchSuggestionState.activeIndex + 1) % visible.length;
+        refreshActiveBranchSuggestions();
+        return;
+      }
+      if (event.key === 'ArrowUp' && visible.length > 0) {
+        event.preventDefault();
+        branchSuggestionState.activeIndex = (branchSuggestionState.activeIndex - 1 + visible.length) % visible.length;
+        refreshActiveBranchSuggestions();
+        return;
+      }
+      if (isBranchSuggestionAcceptKey(event.key) && visible.length > 0) {
+        event.preventDefault();
+        applyBranchSuggestion(kind, visible[branchSuggestionState.activeIndex] || visible[0]);
+        return;
+      }
+      if (event.key === 'Escape') {
+        hideBranchSuggestions();
+      }
+    }
+
+    function getBranchInput(kind) {
+      return document.getElementById(kind === 'source' ? 'sourceBranch' : 'targetBranch');
+    }
+
+    function isBranchSuggestionAcceptKey(key) {
+      return key === 'Enter' || key === ' ' || key === 'Spacebar';
+    }
+
+    function getBranchSuggestionsEl(kind) {
+      return document.getElementById(kind === 'source' ? 'sourceBranchSuggestions' : 'targetBranchSuggestions');
+    }
+
+    function getVisibleBranchSuggestions(kind) {
+      const input = getBranchInput(kind);
+      const suggestions = branchSuggestionState[kind] || [];
+      const query = (input?.value || '').trim().toLowerCase();
+      if (!query) return suggestions.slice(0, BRANCH_SUGGESTION_LIMIT);
+      return suggestions.filter(branch => {
+        if (kind === 'target' && branch === '{init}') return true;
+        return branch.toLowerCase().includes(query);
+      }).slice(0, BRANCH_SUGGESTION_LIMIT);
+    }
+
+    function refreshActiveBranchSuggestions() {
+      for (const kind of ['source', 'target']) {
+        const popup = getBranchSuggestionsEl(kind);
+        if (!popup) continue;
+        const visible = branchSuggestionState.activeKind === kind ? getVisibleBranchSuggestions(kind) : [];
+        popup.classList.toggle('visible', visible.length > 0);
+        const items = visible.map((branch, index) => {
+          const item = document.createElement('div');
+          item.className = 'branch-suggestion-item' + (index === branchSuggestionState.activeIndex ? ' active' : '');
+          item.textContent = branch;
+          if (branch === '{init}') {
+            const label = document.createElement('span');
+            label.className = 'branch-suggestion-kind';
+            label.textContent = '全量';
+            item.appendChild(label);
+          }
+          item.addEventListener('mousedown', (event) => {
+            event.preventDefault();
+            applyBranchSuggestion(kind, branch);
+          });
+          return item;
+        });
+        popup.replaceChildren(...items);
+      }
+    }
+
+    function applyBranchSuggestion(kind, branch) {
+      const input = getBranchInput(kind);
+      if (!input || !branch) return;
+      input.value = branch;
+      if (kind === 'source') state.sourceBranch = branch;
+      else state.targetBranch = branch;
+      clearMR();
+      hideBranchSuggestions();
+      input.focus();
+    }
+
+    function hideBranchSuggestions() {
+      branchSuggestionState.activeKind = null;
+      document.querySelectorAll('.branch-suggestions').forEach(el => el.classList.remove('visible'));
+    }
+
+    function hideBranchSuggestionsSoon() {
+      setTimeout(() => {
+        const active = document.activeElement;
+        if (active?.id !== 'sourceBranch' && active?.id !== 'targetBranch') hideBranchSuggestions();
+      }, 120);
+    }
+
+    function openFileAtLine(event, el) {
+      if (event) event.stopPropagation();
+      const filePath = el?.dataset?.filePath;
+      if (!filePath) return;
+      vscode.postMessage({
+        type: 'openFileAtLine',
+        filePath,
+        lineNumber: normalizeLineNumber(el.dataset.lineNumber),
+      });
+    }
+
+    function openFileFromElement(el) {
+      const filePath = el?.dataset?.filePath;
+      if (!filePath) return;
+      vscode.postMessage({ type: 'openFile', filePath });
+    }
+
+    function clearMR() {
+      state.mrId = '';
+      const select = document.getElementById('mrSelect');
+      if (select) select.value = '';
+    }
+
+    function openDiff() {
+      const sourceInput = document.getElementById('sourceBranch').value;
+      const targetInput = document.getElementById('targetBranch').value;
+      const mrSelect = document.getElementById('mrSelect');
+      const selectedMRId = mrSelect?.value || '';
+
+      if (selectedMRId && selectedMRId !== '__input__') {
+        const mr = state.mrList.find(m => String(m.id) === selectedMRId);
+        if (mr && mr.sourceBranch && mr.targetBranch) {
+          const sourceEl = document.getElementById('sourceBranch');
+          const targetEl = document.getElementById('targetBranch');
+          if (sourceEl) sourceEl.value = mr.sourceBranch;
+          if (targetEl) targetEl.value = mr.targetBranch;
+          vscode.postMessage({
+            type: 'openDiff',
+            sourceBranch: mr.sourceBranch,
+            targetBranch: mr.targetBranch,
+            mrId: selectedMRId,
+          });
+          return;
+        }
+        vscode.postMessage({
+          type: 'openDiff',
+          sourceBranch: sourceInput,
+          targetBranch: targetInput,
+          mrId: selectedMRId,
+        });
+        return;
+      }
+
+      if (!sourceInput || !targetInput) {
+        notificationRequests.push({ type: 'notificationRequest', id: `local-${Date.now()}`, kind: 'toast', severity: 'warning', message: '请填写源分支和目标分支，或选择一个 MR', items: [], timeoutMs: 4200 });
+        renderNotifications();
+        return;
+      }
+
+      vscode.postMessage({
+        type: 'openDiff',
+        sourceBranch: sourceInput,
+        targetBranch: targetInput,
+      });
+    }
+
+    function clearReview() {
+      const sourceInput = document.getElementById('sourceBranch')?.value || state.sourceBranch || '';
+      const targetInput = document.getElementById('targetBranch')?.value || state.targetBranch || '';
+      state = {
+        ...state,
+        sourceBranch: sourceInput,
+        targetBranch: targetInput,
+        files: [],
+        comments: [],
+        deletedComments: [],
+        remoteComments: [],
+      };
+      highlightCommentIds.clear();
+      scrollPositions = { files: 0, comments: 0, remote: 0, trash: 0 };
+      vscode.postMessage({
+        type: 'clearReview',
+        sourceBranch: sourceInput,
+        targetBranch: targetInput,
+        mrId: state.mrId || '',
+      });
+      render();
+    }
+
+    function loadMRs() {
+      vscode.postMessage({ type: 'loadMRs' });
+    }
+
+    function selectMR(mrId) {
+      if (!mrId) return;
+      const mr = state.mrList.find(m => String(m.id) === mrId);
+      state.mrId = mrId;
+      state.sourceBranch = mr?.sourceBranch || '';
+      state.targetBranch = mr?.targetBranch || '';
+      render();
+    }
+
+    vscode.postMessage({ type: 'restoreState' });
+
+    window.addEventListener('message', (event) => {
+      const msg = event.data;
+      if (msg.type === 'updateState') {
+        const prevComments = state.comments || [];
+        const newComments = msg.state.comments || [];
+        const prevIds = new Set(prevComments.map(c => c.id));
+        for (const c of newComments) {
+          if (!prevIds.has(c.id)) {
+            highlightCommentIds.add(c.id);
+          }
+        }
+
+        const prevFiles = state.files || [];
+        const newFiles = msg.state.files || [];
+        if (prevFiles.length !== newFiles.length || JSON.stringify(prevFiles.map(f => f.filePath)) !== JSON.stringify(newFiles.map(f => f.filePath))) {
+          expandedGroups.clear();
+        }
+        collectAllGroups();
+
+        state = { ...state, ...msg.state };
+        agentSignature = msg.state.agentSignature || '';
+        userSignature = msg.state.userSignature || '';
+
+        if (highlightCommentIds.size > 0) {
+          activeTab = 'comments';
+        }
+
+        render();
+      } else if (msg.type === 'editContent') {
+        editingCommentId = msg.id;
+        editingContent = msg.content || '';
+        render();
+        setTimeout(() => {
+          const ta = document.getElementById('editor-' + msg.id);
+          if (ta) { ta.focus(); ta.selectionStart = ta.selectionEnd = ta.value.length; }
+        }, 50);
+      } else if (msg.type === 'updateMRList') {
+        state.mrList = msg.mrList || [];
+        state.mrId = msg.mrId || '';
+        render();
+      } else if (msg.type === 'updateBranchSuggestions') {
+        const kind = msg.kind === 'target' ? 'target' : 'source';
+        branchSuggestionState[kind] = msg.suggestions || [];
+        branchSuggestionState.activeIndex = 0;
+        refreshActiveBranchSuggestions();
+      } else if (msg.type === 'notificationRequest') {
+        notificationRequests = notificationRequests.filter(n => n.id !== msg.id);
+        notificationRequests.push(msg);
+        renderNotifications();
+        if (msg.kind === 'toast' && msg.timeoutMs > 0) {
+          setTimeout(() => {
+            if (findNotification(msg.id)) {
+              vscode.postMessage({ type: 'notificationResponse', id: msg.id, dismissed: true });
+              removeNotification(msg.id);
+            }
+          }, msg.timeoutMs);
+        }
+      }
+    });
+
+    render();
+    renderNotifications();
+  </script>
+</body>
+</html>
