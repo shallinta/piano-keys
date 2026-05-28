@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 - 2026-05-28
+
+### Changed
+- 插件显示名称改为 Piano Keys CodeReview
+
 ## 1.0.0 - 2026-05-26
 
 ### Changed
