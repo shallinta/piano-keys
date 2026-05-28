@@ -1,5 +1,9 @@
 # Piano Keys CodeReview
 
+[![Version](https://img.shields.io/visual-studio-marketplace/v/Shallinta.piano-keys-codereview?label=VS%20Marketplace&color=blue)](https://marketplace.visualstudio.com/items?itemName=Shallinta.piano-keys-codereview)
+[![Installs](https://img.shields.io/visual-studio-marketplace/i/Shallinta.piano-keys-codereview?color=green)](https://marketplace.visualstudio.com/items?itemName=Shallinta.piano-keys-codereview)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/Shallinta.piano-keys-codereview?color=yellow)](https://marketplace.visualstudio.com/items?itemName=Shallinta.piano-keys-codereview)
+
 > VSCode 代码评审插件，支持 AI Agent 辅助 Code Review
 
 ## 功能概览
@@ -15,22 +19,28 @@
 
 ## 安装
 
-### 方式一：从源码安装
+### 方式一：VSCode 扩展市场搜索安装（推荐）
 
-```bash
-# 克隆仓库
-git clone https://github.com/shallinta/piano-keys.git
-cd piano-keys
+1. 打开 VSCode，点击左侧活动栏的 **扩展** 图标（或按 `Ctrl+Shift+X` / `Cmd+Shift+X`）
+2. 搜索 **Piano Keys CodeReview**
+3. 点击 **安装** 按钮
 
-# 安装依赖并编译
-npm install && npm run compile
+### 方式二：通过插件网页链接安装
 
-# 打包 VSIX
-npx @vscode/vsce package
+点击以下链接一键安装：
 
-# 在 VSCode 中安装：Extensions: Install from VSIX...
-# 选择生成的 ./piano-keys-codereview-*.vsix
 ```
+vscode:extension/Shallinta.piano-keys-codereview
+```
+
+或访问 [Marketplace 页面](https://marketplace.visualstudio.com/items?itemName=Shallinta.piano-keys-codereview)，点击 **Install** 按钮，将自动打开本地 VSCode 并完成安装。
+
+### 方式三：从 GitHub Releases 下载安装
+
+1. 访问 [GitHub Releases 页面](https://github.com/shallinta/piano-keys/releases)
+2. 下载最新版本的 `piano-keys-codereview-*.vsix` 文件
+3. 在 VSCode 中执行命令：`Extensions: Install from VSIX...`
+4. 选择下载的 `.vsix` 文件完成安装
 
 ## 用户使用指南
 
