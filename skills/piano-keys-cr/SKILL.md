@@ -1,7 +1,7 @@
 ---
 name: piano-keys-cr
 description: Use when reviewing code diffs, creating inline review comments, or managing MR comments via the piano-keys VSCode extension. Trigger whenever the user mentions code review, CR, reviewing changes, opening a diff, comparing branches, submitting or confirming review comments, or asks to review a merge request or pull request. Also use when the user wants AI-assisted code review on any branch comparison.
-version: 44
+version: 45
 ---
 
 # Piano Keys CodeReview
@@ -301,22 +301,11 @@ When users ask how to use the plugin, provide clear step-by-step instructions. C
 
 If the skill is triggered but `~/.piano-keys/ports.json` does not exist, the piano-keys VSCode extension is not running. Guide the user to install and enable it:
 
-1. **Install from VSCode marketplace**: In VSCode Extensions (`Ctrl+Shift+X`), search for **Piano Keys** (publisher: `shallinta`) and click Install.
-2. **Install from source**:
-   ```bash
-   git clone <repo-url> piano-keys && cd piano-keys
-   npm install && npm run compile
-   npx @vscode/vsce package
-   code --install-extension ./piano-keys-codereview-*.vsix
-   ```
-3. **Restart VSCode** — the extension activates automatically on workspace open.
-4. After installation, verify: open VSCode side panel and look for the Piano Keys icon. Once visible, the HTTP API will be available and you can retry the connection.
-
-If the user is on a Mac and has the `code` CLI installed, they can also install the `.vsix` file directly:
-
-```bash
-code --install-extension /path/to/piano-keys-codereview-*.vsix
-```
+1. **Install from VSCode Marketplace** (recommended): In VSCode Extensions (`Ctrl+Shift+X` / `Cmd+Shift+X`), search for **Piano Keys CodeReview** (publisher: `shallinta`) and click Install.
+2. **Install via Marketplace link**: Open [Marketplace page](https://marketplace.visualstudio.com/items?itemName=shallinta.piano-keys-codereview) and click **Install**, or use the direct link `vscode:extension/Shallinta.piano-keys-codereview`.
+3. **Install from GitHub Releases**: Download the latest `piano-keys-codereview-*.vsix` from [GitHub Releases](https://github.com/shallinta/piano-keys/releases), then run `code --install-extension /path/to/piano-keys-codereview-*.vsix` or use VSCode command `Extensions: Install from VSIX...`.
+4. **Restart VSCode** — the extension activates automatically on workspace open.
+5. After installation, verify: open VSCode side panel and look for the Piano Keys icon. Once visible, the HTTP API will be available and you can retry the connection.
 
 ## Connection
 
