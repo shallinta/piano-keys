@@ -1,8 +1,8 @@
 # Piano Keys CodeReview
 
-[![Version](https://img.shields.io/visual-studio-marketplace/v/Shallinta.piano-keys-codereview?label=VS%20Marketplace&color=blue)](https://marketplace.visualstudio.com/items?itemName=Shallinta.piano-keys-codereview)
-[![Installs](https://img.shields.io/visual-studio-marketplace/i/Shallinta.piano-keys-codereview?color=green)](https://marketplace.visualstudio.com/items?itemName=Shallinta.piano-keys-codereview)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/Shallinta.piano-keys-codereview?color=yellow)](https://marketplace.visualstudio.com/items?itemName=Shallinta.piano-keys-codereview)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/shallinta.piano-keys-codereview?label=VS%20Marketplace&color=blue)](https://marketplace.visualstudio.com/items?itemName=shallinta.piano-keys-codereview)
+[![Installs](https://img.shields.io/visual-studio-marketplace/i/shallinta.piano-keys-codereview?color=green)](https://marketplace.visualstudio.com/items?itemName=shallinta.piano-keys-codereview)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/shallinta.piano-keys-codereview?color=yellow)](https://marketplace.visualstudio.com/items?itemName=shallinta.piano-keys-codereview)
 
 > VSCode 代码评审插件，支持 AI Agent 辅助 Code Review
 
