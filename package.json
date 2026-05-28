@@ -2,7 +2,7 @@
   "name": "piano-keys-codereview",
   "displayName": "Piano Keys CodeReview",
   "description": "Code review plugin with AI agent assistance",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "shallinta",
   "repository": {
     "type": "git",

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 - 2026-05-28
+
+### Changed
+- 更新 README 安装方式，方式三改为 GitHub Releases 下载
+- 修复 shields.io badge 显示问题，替换为静态版本 badge
+- 同步更新 SKILL.md 安装引导说明
+
 ## 1.0.1 - 2026-05-28
 
 ### Changed
