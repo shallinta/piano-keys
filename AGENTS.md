@@ -74,7 +74,7 @@ npx @vscode/vsce package --out releases/
 
 打包产物默认存放在 `releases/` 目录下。
 
-**发布方式**：打包后得到 `.vsix` 文件（如 `releases/piano-keys-0.1.0.vsix`），需手动上传发布：
+**发布方式**：打包后得到 `.vsix` 文件（如 `releases/piano-keys-codereview-1.0.1.vsix`），需手动上传发布：
 1. 打开 [VSCode Marketplace Publisher 管理页面](https://marketplace.visualstudio.com/manage/publishers/shallinta)
 2. 点击 `piano-keys` 扩展进入详情页
 3. 点击「Update」或「Upload」按钮，选择 `releases/` 目录下最新版本的 `.vsix` 文件

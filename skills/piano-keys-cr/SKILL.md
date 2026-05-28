@@ -307,7 +307,7 @@ If the skill is triggered but `~/.piano-keys/ports.json` does not exist, the pia
    git clone <repo-url> piano-keys && cd piano-keys
    npm install && npm run compile
    npx @vscode/vsce package
-   code --install-extension ./piano-keys-*.vsix
+   code --install-extension ./piano-keys-codereview-*.vsix
    ```
 3. **Restart VSCode** — the extension activates automatically on workspace open.
 4. After installation, verify: open VSCode side panel and look for the Piano Keys icon. Once visible, the HTTP API will be available and you can retry the connection.
@@ -315,7 +315,7 @@ If the skill is triggered but `~/.piano-keys/ports.json` does not exist, the pia
 If the user is on a Mac and has the `code` CLI installed, they can also install the `.vsix` file directly:
 
 ```bash
-code --install-extension /path/to/piano-keys-*.vsix
+code --install-extension /path/to/piano-keys-codereview-*.vsix
 ```
 
 ## Connection

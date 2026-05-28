@@ -29,7 +29,7 @@ npm install && npm run compile
 npx @vscode/vsce package
 
 # 在 VSCode 中安装：Extensions: Install from VSIX...
-# 选择生成的 ./piano-keys-*.vsix
+# 选择生成的 ./piano-keys-codereview-*.vsix
 ```
 
 ## 用户使用指南
