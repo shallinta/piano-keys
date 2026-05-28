@@ -1,4 +1,4 @@
-# Piano Keys
+# Piano Keys CodeReview
 
 > VSCode 代码评审插件，支持 AI Agent 辅助 Code Review
 

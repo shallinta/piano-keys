@@ -40,7 +40,7 @@ export class DiffCommentController {
 
   constructor(context: vscode.ExtensionContext, commentStore: CommentStore) {
     this.commentStore = commentStore;
-    this.controller = vscode.comments.createCommentController('piano-keys', 'Piano Keys Review');
+    this.controller = vscode.comments.createCommentController('piano-keys', 'Piano Keys CodeReview');
 
     this.controller.commentingRangeProvider = {
       provideCommentingRanges: (document) => {

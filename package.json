@@ -1,6 +1,6 @@
 {
   "name": "piano-keys",
-  "displayName": "Piano Keys",
+  "displayName": "Piano Keys CodeReview",
   "description": "Code review plugin with AI agent assistance",
   "version": "1.0.0",
   "publisher": "shallinta",
@@ -24,7 +24,7 @@
       "activitybar": [
         {
           "id": "piano-keys",
-          "title": "Piano Keys",
+          "title": "Piano Keys CodeReview",
           "icon": "media/icon.svg"
         }
       ]
@@ -45,75 +45,75 @@
     "commands": [
       {
         "command": "piano-keys.startReview",
-        "title": "Piano Keys: Start Code Review"
+        "title": "Piano Keys CodeReview: Start Code Review"
       },
       {
         "command": "piano-keys.openDiff",
-        "title": "Piano Keys: Open Diff"
+        "title": "Piano Keys CodeReview: Open Diff"
       },
       {
         "command": "piano-keys.openFile",
-        "title": "Piano Keys: Open File Diff"
+        "title": "Piano Keys CodeReview: Open File Diff"
       },
       {
         "command": "piano-keys.submitAllComments",
-        "title": "Piano Keys: Submit All Comments"
+        "title": "Piano Keys CodeReview: Submit All Comments"
       },
       {
         "command": "piano-keys.submitSingleComment",
-        "title": "Piano Keys: Submit Single Comment"
+        "title": "Piano Keys CodeReview: Submit Single Comment"
       },
       {
         "command": "piano-keys.confirmAllAgentComments",
-        "title": "Piano Keys: Confirm All Agent Comments"
+        "title": "Piano Keys CodeReview: Confirm All Agent Comments"
       },
       {
         "command": "piano-keys.refreshSidePanel",
-        "title": "Piano Keys: Refresh Side Panel"
+        "title": "Piano Keys CodeReview: Refresh Side Panel"
       },
       {
         "command": "piano-keys.refreshEditorThreads",
-        "title": "Piano Keys: Refresh Editor Threads"
+        "title": "Piano Keys CodeReview: Refresh Editor Threads"
       },
       {
         "command": "piano-keys.addAgentComment",
-        "title": "Piano Keys: Add Agent Comment"
+        "title": "Piano Keys CodeReview: Add Agent Comment"
       },
       {
         "command": "piano-keys.getReviewState",
-        "title": "Piano Keys: Get Review State"
+        "title": "Piano Keys CodeReview: Get Review State"
       },
       {
         "command": "piano-keys.deleteAgentComment",
-        "title": "Piano Keys: Delete Agent Comment"
+        "title": "Piano Keys CodeReview: Delete Agent Comment"
       },
       {
         "command": "piano-keys.agentSubmitAll",
-        "title": "Piano Keys: Agent Submit All"
+        "title": "Piano Keys CodeReview: Agent Submit All"
       },
       {
         "command": "piano-keys.agentOpenFileDiff",
-        "title": "Piano Keys: Open File Diff (Agent)"
+        "title": "Piano Keys CodeReview: Open File Diff (Agent)"
       },
       {
         "command": "piano-keys.installSkill",
-        "title": "Piano Keys: Install Code Review Skill"
+        "title": "Piano Keys CodeReview: Install Code Review Skill"
       },
       {
         "command": "piano-keys.createComment",
-        "title": "Piano Keys: Create Comment"
+        "title": "Piano Keys CodeReview: Create Comment"
       },
       {
         "command": "piano-keys.replyComment",
-        "title": "Piano Keys: Reply to Comment"
+        "title": "Piano Keys CodeReview: Reply to Comment"
       },
       {
         "command": "piano-keys.deleteThread",
-        "title": "Piano Keys: Delete Thread"
+        "title": "Piano Keys CodeReview: Delete Thread"
       },
       {
         "command": "piano-keys.deleteComment",
-        "title": "Piano Keys: Delete Comment"
+        "title": "Piano Keys CodeReview: Delete Comment"
       }
     ],
     "menus": {
@@ -213,7 +213,7 @@
       ]
     },
     "configuration": {
-      "title": "Piano Keys",
+      "title": "Piano Keys CodeReview",
       "properties": {
         "piano-keys.01.theme": {
           "type": "string",
