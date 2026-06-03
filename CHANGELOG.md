@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3 - 2026-06-03
+
+### Added
+- 增加 MIT License，并在 package.json 中声明 license 字段
+
 ## 1.0.2 - 2026-05-28
 
 ### Changed
